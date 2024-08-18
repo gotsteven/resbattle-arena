@@ -1,5 +1,12 @@
+import { ThemeIcon } from '@/components/ThemeButton'
+
 const Home = () => {
-  return <main>Hello, Next.js</main>
+  return (
+    <main className="bg-background text-foreground">
+      Hello, Next.js
+      <ThemeIcon />
+    </main>
+  )
 }
 
 export default Home

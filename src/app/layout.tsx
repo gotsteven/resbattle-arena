@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Noto_Sans_JP } from 'next/font/google'
 import type { ReactNode } from 'react'
-import './globals.css'
+import { twMerge } from 'tailwind-merge'
+import '../styles/globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const noto = Noto_Sans_JP({ weight: ['400', '600'], subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,8 +17,16 @@ export default function RootLayout({
   children: ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="m-0 h-svh">
+      <body
+        className={twMerge(
+          noto.className,
+          'bg-background text-foreground',
+          'scrollbar-thin scrollbar-thumb-background-200 scrollbar-thumb-rounded-full scrollbar-track-transparent',
+        )}
+      >
+        {children}
+      </body>
     </html>
   )
 }
