@@ -1,0 +1,27 @@
+name: Lint and TypeCheck
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Setup pnpm
+        run: corepack enable
+      - name: Install dependencies
+        run: pnpm i --frozen-lockfile
+      - name: Check lint and format
+        run: pnpm check
+      - name: Type check
+        run: pnpm typecheck
