@@ -1,3 +1,4 @@
+import { Layout } from '@/layouts/Layout'
 import type { Metadata } from 'next'
 import { Noto_Sans_JP } from 'next/font/google'
 import type { ReactNode } from 'react'
@@ -25,7 +26,7 @@ export default function RootLayout({
           'scrollbar-thin scrollbar-thumb-background-200 scrollbar-thumb-rounded-full scrollbar-track-transparent',
         )}
       >
-        {children}
+        <Layout>{children}</Layout>
       </body>
     </html>
   )
