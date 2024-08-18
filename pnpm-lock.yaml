@@ -17,6 +17,9 @@ dependencies:
   react-dom:
     specifier: ^18
     version: 18.3.1(react@18.3.1)
+  zod:
+    specifier: ^3.23.8
+    version: 3.23.8
 
 devDependencies:
   '@biomejs/biome':
@@ -1234,3 +1237,7 @@ packages:
     engines: {node: '>= 14'}
     hasBin: true
     dev: true
+
+  /zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+    dev: false
