@@ -16,10 +16,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
+    "postcss-import": "^16.1.0",
+    "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
