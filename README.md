@@ -29,3 +29,4 @@ pnpm install
 - `pnpm dev` - Start development server
 - `pnpm check` - Check linting and formatting
 - `pnpm fix` - Fix linting and formatting
+- `pnpm typecheck` - Check Type errors
