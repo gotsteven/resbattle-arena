@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "pnpm generate:drizzle && pnpm migrate && next build",
     "start": "next start",
     "check": "biome check ./",
     "fix": "biome check --write ./",
