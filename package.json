@@ -8,7 +8,9 @@
     "start": "next start",
     "check": "biome check ./",
     "fix": "biome check --write ./",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate:drizzle": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@vercel/postgres": "^0.9.0",

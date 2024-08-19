@@ -30,9 +30,19 @@ pnpm install
 cp .env.local.example .env.local
 ```
 
+Copy the required information from `vercel/postgres`
+
+5. Migrate database
+
+```bash
+pnpm migrate
+```
+
 ### Commands
 
 - `pnpm dev` - Start development server
 - `pnpm check` - Check linting and formatting
 - `pnpm fix` - Fix linting and formatting
 - `pnpm typecheck` - Check Type errors
+- `pnpm generate:drizzle` - Generate migration files for drizzle
+- `pnpm migrate` - Migrate database with drizzle
