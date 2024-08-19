@@ -24,6 +24,12 @@ corepack enable
 pnpm install
 ```
 
+4. Create environment file
+
+```bash
+cp .env.local.example .env.local
+```
+
 ### Commands
 
 - `pnpm dev` - Start development server
