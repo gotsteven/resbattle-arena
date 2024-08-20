@@ -26,6 +26,21 @@ CREATE TABLE IF NOT EXISTS "authenticator" (
 	CONSTRAINT "authenticator_credentialID_unique" UNIQUE("credentialID")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "session" (
+	"sessionToken" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
+	"expires" timestamp NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "user" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text,
+	"email" text,
+	"emailVerified" timestamp,
+	"image" text,
+	CONSTRAINT "user_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "verificationToken" (
 	"identifier" text NOT NULL,
 	"token" text NOT NULL,
@@ -33,18 +48,6 @@ CREATE TABLE IF NOT EXISTS "verificationToken" (
 	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
 );
 --> statement-breakpoint
-ALTER TABLE "session" RENAME COLUMN "user_id" TO "userId";--> statement-breakpoint
-ALTER TABLE "session" RENAME COLUMN "expires_at" TO "expires";--> statement-breakpoint
-ALTER TABLE "user" RENAME COLUMN "display_name" TO "name";--> statement-breakpoint
-ALTER TABLE "user" RENAME COLUMN "icon_url" TO "image";--> statement-breakpoint
-ALTER TABLE "user" DROP CONSTRAINT "user_google_profile_id_unique";--> statement-breakpoint
-ALTER TABLE "session" DROP CONSTRAINT "session_user_id_user_id_fk";
---> statement-breakpoint
-ALTER TABLE "session" ALTER COLUMN "expires" SET DATA TYPE timestamp;--> statement-breakpoint
-ALTER TABLE "user" ALTER COLUMN "name" DROP NOT NULL;--> statement-breakpoint
-ALTER TABLE "session" ADD COLUMN "sessionToken" text PRIMARY KEY NOT NULL;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "email" text;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "emailVerified" timestamp;--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
@@ -62,9 +65,3 @@ DO $$ BEGIN
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
---> statement-breakpoint
-ALTER TABLE "session" DROP COLUMN IF EXISTS "id";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "google_profile_id";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "created_at";--> statement-breakpoint
-ALTER TABLE "user" DROP COLUMN IF EXISTS "updated_at";--> statement-breakpoint
-ALTER TABLE "user" ADD CONSTRAINT "user_email_unique" UNIQUE("email");

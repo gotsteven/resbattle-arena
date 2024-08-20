@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1724092842738,
-      "tag": "0000_early_mac_gargan",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1724159790152,
-      "tag": "0001_first_rocket_racer",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1724180239006,
-      "tag": "0002_colossal_mariko_yashida",
+      "when": 1724192007483,
+      "tag": "0000_mute_whizzer",
       "breakpoints": true
     }
   ]
