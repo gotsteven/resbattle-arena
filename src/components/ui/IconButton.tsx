@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge'
 type IconButtonProps = {
   icon: Icon
   label?: string
+  type?: 'button' | 'submit'
   iconPosition?: 'left' | 'right'
   size?: number
   iconClassName?: string
@@ -13,13 +14,14 @@ type IconButtonProps = {
 export const IconButton: FC<IconButtonProps> = ({
   label,
   size,
+  type = 'button',
   icon: Icon,
   iconPosition,
   iconClassName,
   ...props
 }) => (
   <button
-    type="button"
+    type={type}
     {...props}
     className={twMerge(
       iconPosition === 'right' && 'flex-row-reverse',
