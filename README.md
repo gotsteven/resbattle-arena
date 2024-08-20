@@ -30,7 +30,12 @@ pnpm install
 cp .env.local.example .env.local
 ```
 
-Copy the required information from `vercel/postgres`
+Copy the required information from `vercel/postgres`, `google cloud`. \
+And, execute the following command to generate `AUTH_SECRET`
+
+```bash
+npx auth secret
+```
 
 5. Migrate database
 
