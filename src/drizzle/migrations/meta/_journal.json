@@ -8,6 +8,13 @@
       "when": 1724092842738,
       "tag": "0000_early_mac_gargan",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724159790152,
+      "tag": "0001_first_rocket_racer",
+      "breakpoints": true
     }
   ]
 }
