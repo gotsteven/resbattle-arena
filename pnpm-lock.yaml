@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@auth/drizzle-adapter':
+    specifier: ^1.4.2
+    version: 1.4.2
   '@vercel/postgres':
     specifier: ^0.9.0
     version: 0.9.0
@@ -105,6 +108,16 @@ packages:
       oauth4webapi: 2.12.0
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: false
+
+  /@auth/drizzle-adapter@1.4.2:
+    resolution: {integrity: sha512-rqukaT9CeWB8VOt6g2bQ6uYMHVOQIYCBkzddZXWshi8aqwLABatpRWAc+pehpcMDn0RSW/uvKMs7tkON+Bho9Q==}
+    dependencies:
+      '@auth/core': 0.34.2
+    transitivePeerDependencies:
+      - '@simplewebauthn/browser'
+      - '@simplewebauthn/server'
+      - nodemailer
     dev: false
 
   /@biomejs/biome@1.8.3:
