@@ -5,20 +5,41 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "pnpm generate:drizzle && pnpm migrate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "check": "biome check ./",
+    "fix": "biome check --write ./",
+    "typecheck": "tsc --noEmit",
+    "generate:drizzle": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@vercel/postgres": "^0.9.0",
+    "drizzle-orm": "^0.33.0",
+    "hono": "^4.5.6",
+    "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.5"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@biomejs/biome": "1.8.3",
+    "@next/env": "^14.2.5",
+    "@tabler/icons-react": "^3.12.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.20",
+    "drizzle-kit": "^0.24.0",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "postcss-import": "^16.1.0",
+    "tailwind-merge": "^2.5.2",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "volta": {
+    "node": "20.16.0"
   }
 }
