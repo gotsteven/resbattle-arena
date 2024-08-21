@@ -1,5 +1,5 @@
-import { ApiStatus } from '@/components/ApiStatus'
 import { PROJECT_NAME } from '@/constants/project'
+import { ApiStatus } from './ApiStatus'
 
 const Home = async () => {
   return (
