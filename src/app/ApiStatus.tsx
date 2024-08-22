@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react'
 export const ApiStatus = () => {
   const [status, setStatus] = useState<string>('loading')
   useEffect(() => {
-    const fetachAndSet = async () => {
-      const res = await apiClient.api.health.$get()
-      const json = await res.json()
-      setStatus(json.status)
+    try {
+      const fetchAndSet = async () => {
+        const res = await apiClient.api.health.$get()
+        const json = await res.json()
+        setStatus(json.status)
+      }
+      fetchAndSet()
+    } catch (e) {
+      setStatus('error')
     }
-    fetachAndSet()
 
     return () => setStatus('loading')
   }, [])
