@@ -1,8 +1,8 @@
-import { boolean, integer, pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
 export const users = pgTable('user', {
-  id: text('id')
+  id: uuid('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name'),
@@ -79,7 +79,7 @@ export const authenticators = pgTable(
 )
 
 export const debateRooms = pgTable('debate_rooms', {
-  id: text('id')
+  id: uuid('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()), // 部屋のUUID
   topic: text('topic').notNull(), // ディベートのトピック
