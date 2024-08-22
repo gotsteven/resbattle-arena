@@ -1,33 +1,29 @@
 'use client'
 import { apiClient } from '@/lib/apiClient'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const createRoomPage = () => {
-  const [playerId, setPlayerId] = useState<string>('')
   const [topic, setTopic] = useState<string>('')
-  const [roomId, setroomId] = useState<string>('undefined')
-  const [roomStatus, setroomStatus] = useState<string>('undefined')
+  const { data: session } = useSession()
+  const router = useRouter()
+  if (!session) {
+    return <p>ログインしていません</p>
+  }
   const fetchRoom = async () => {
     const res = await apiClient.api.room.create.$post({
-      json: { player1_id: playerId, topic: topic },
+      json: { player1_id: session?.user?.id, topic: topic },
     })
     if (res.ok) {
       const data = await res.json()
-      setroomId(data.room_id)
-      setroomStatus(data.status)
+      router.push(`/room/${data.room_id}`)
     }
   }
   return (
     <div>
       createRoom
-      <div>
-        playerId:
-        <input
-          type="text"
-          value={playerId}
-          onChange={(e) => setPlayerId(e.target.value)} // ユーザーが入力した内容を state に保存
-        />
-      </div>
+      <p>Signed in as {session?.user?.id}</p>
       <div>
         topic:
         <input
@@ -36,15 +32,9 @@ const createRoomPage = () => {
           onChange={(e) => setTopic(e.target.value)} // ユーザーが入力した内容を state に保存
         />
       </div>
-      <button onClick={fetchRoom} type="button">
+      <button onClick={fetchRoom} type="submit">
         roomを作成
       </button>
-      <p>
-        roomId:<span>{roomId}</span>
-      </p>
-      <p>
-        roomStatus:<span>{roomStatus}</span>
-      </p>
     </div>
   )
 }
