@@ -77,3 +77,13 @@ export const authenticators = pgTable(
     }),
   }),
 )
+
+export const debateRooms = pgTable('debate_rooms', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()), // 部屋のUUID
+  topic: text('topic').notNull(), // ディベートのトピック
+  player1_id: text('player1_id').notNull(), // プレイヤー1のID
+  player2_id: text('player2_id'), // プレイヤー2のID（後で参加する）
+  status: text('status').notNull().default('waiting'), // 部屋のステータス
+})
