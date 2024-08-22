@@ -14,7 +14,7 @@ export const users = pgTable('user', {
 export const accounts = pgTable(
   'account',
   {
-    userId: text('userId')
+    userId: uuid('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').$type<AdapterAccountType>().notNull(),
@@ -37,7 +37,7 @@ export const accounts = pgTable(
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').primaryKey(),
-  userId: text('userId')
+  userId: uuid('userId')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   expires: timestamp('expires', { mode: 'date' }).notNull(),
@@ -61,7 +61,7 @@ export const authenticators = pgTable(
   'authenticator',
   {
     credentialID: text('credentialID').notNull().unique(),
-    userId: text('userId')
+    userId: uuid('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     providerAccountId: text('providerAccountId').notNull(),

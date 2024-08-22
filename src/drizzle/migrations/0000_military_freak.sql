@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "account" (
-	"userId" text NOT NULL,
+	"userId" uuid NOT NULL,
 	"type" text NOT NULL,
 	"provider" text NOT NULL,
 	"providerAccountId" text NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS "account" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "authenticator" (
 	"credentialID" text NOT NULL,
-	"userId" text NOT NULL,
+	"userId" uuid NOT NULL,
 	"providerAccountId" text NOT NULL,
 	"credentialPublicKey" text NOT NULL,
 	"counter" integer NOT NULL,
@@ -26,14 +26,22 @@ CREATE TABLE IF NOT EXISTS "authenticator" (
 	CONSTRAINT "authenticator_credentialID_unique" UNIQUE("credentialID")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "debate_rooms" (
+	"id" uuid PRIMARY KEY NOT NULL,
+	"topic" text NOT NULL,
+	"player1_id" text NOT NULL,
+	"player2_id" text,
+	"status" text DEFAULT 'waiting' NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "session" (
 	"sessionToken" text PRIMARY KEY NOT NULL,
-	"userId" text NOT NULL,
+	"userId" uuid NOT NULL,
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (
-	"id" text PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"name" text,
 	"email" text,
 	"emailVerified" timestamp,
