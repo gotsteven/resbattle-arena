@@ -85,5 +85,7 @@ export const debateRooms = pgTable('debate_rooms', {
   topic: text('topic').notNull(), // ディベートのトピック
   player1_id: text('player1_id').notNull(), // プレイヤー1のID
   player2_id: text('player2_id'), // プレイヤー2のID（後で参加する）
+  player1_position: text('player1_position'), //　賛成反対
+  player2_position: text('player2_position'),
   status: text('status').notNull().default('waiting'), // 部屋のステータス
 })

@@ -1,12 +1,5 @@
+import type { Room } from '@/types/types'
 import Link from 'next/link'
-
-interface Room {
-  status: string
-  id: string
-  topic: string
-  player1_id: string
-  player2_id: string | null
-}
 
 const RoomList = ({ rooms }: { rooms: Room[] }) => {
   if (!rooms) {
