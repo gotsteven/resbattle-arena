@@ -12,5 +12,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     verificationTokensTable: verificationTokens,
     authenticatorsTable: authenticators,
   }),
+  callbacks: {
+    session: ({ session, user }) => ({
+      ...session,
+      user: {
+        ...user,
+        id: user.id,
+      },
+    }),
+  },
   providers: [Google],
 })

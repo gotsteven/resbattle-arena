@@ -1,0 +1,1 @@
+ALTER TABLE "authenticator" ALTER COLUMN "userId" SET DATA TYPE text;

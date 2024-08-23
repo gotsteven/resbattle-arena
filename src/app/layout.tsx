@@ -1,5 +1,6 @@
 import { Layout } from '@/layouts/Layout'
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import { Noto_Sans_JP } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -26,7 +27,9 @@ export default function RootLayout({
           'scrollbar-thin scrollbar-thumb-background-200 scrollbar-thumb-rounded-full scrollbar-track-transparent',
         )}
       >
-        <Layout>{children}</Layout>
+        <SessionProvider>
+          <Layout>{children}</Layout>
+        </SessionProvider>
       </body>
     </html>
   )

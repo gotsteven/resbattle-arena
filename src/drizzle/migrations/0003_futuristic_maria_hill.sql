@@ -1,0 +1,1 @@
+ALTER TABLE "debate_rooms" ALTER COLUMN "topic" DROP DEFAULT;

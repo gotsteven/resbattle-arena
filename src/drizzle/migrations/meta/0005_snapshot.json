@@ -1,6 +1,6 @@
 {
-  "id": "ae1cee8f-1c3c-4dcf-bfdc-4c079e424052",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "43d0d22a-1dae-4995-ab01-d17184da33b6",
+  "prevId": "5dccf9ce-5712-43e0-a664-14eb8640e67f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -114,7 +114,7 @@
         },
         "userId": {
           "name": "userId",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -190,6 +190,40 @@
         }
       }
     },
+    "public.debate_messages": {
+      "name": "debate_messages",
+      "schema": "",
+      "columns": {
+        "msg_id": {
+          "name": "msg_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player_id": {
+          "name": "player_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.debate_rooms": {
       "name": "debate_rooms",
       "schema": "",
@@ -214,6 +248,18 @@
         },
         "player2_id": {
           "name": "player2_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player1_position": {
+          "name": "player1_position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player2_position": {
+          "name": "player2_position",
           "type": "text",
           "primaryKey": false,
           "notNull": false

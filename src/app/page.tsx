@@ -1,19 +1,21 @@
+import RoomList from '@/components/RoomList'
 import { PROJECT_NAME } from '@/constants/project'
-import { apiClient } from '@/lib/apiClient'
+import { debateRooms } from '@/drizzle/schema'
+import { dbClient } from '@/lib/dbClient'
+
+import Link from 'next/link'
 
 const Home = async () => {
-  const res = await apiClient.api.health.$get()
-  const json = await res.json()
-
+  const allRooms = await dbClient.select().from(debateRooms)
   return (
     <div className="flex flex-col gap-y-4 bg-background text-foreground">
       Hello, {PROJECT_NAME}
+      <RoomList rooms={allRooms} />
       <div>
-        <p>API HealthCheck</p>
-        <p>
-          status: <span className="text-accent">{json.status}</span>
-        </p>
+        <Link href={'/'}>部屋を更新</Link>
       </div>
+      <Link href={'/room/create'}>部屋を作る</Link>
+      <Link href={'/auth/login'}>ログインする</Link>
     </div>
   )
 }

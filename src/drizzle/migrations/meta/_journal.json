@@ -5,8 +5,43 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1724192007483,
-      "tag": "0000_mute_whizzer",
+      "when": 1724343075911,
+      "tag": "0000_military_freak",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724344057617,
+      "tag": "0001_wakeful_sentry",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724401377424,
+      "tag": "0002_married_wilson_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724403099251,
+      "tag": "0003_futuristic_maria_hill",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1724408935298,
+      "tag": "0004_previous_switch",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1724427330565,
+      "tag": "0005_bent_raider",
       "breakpoints": true
     }
   ]
