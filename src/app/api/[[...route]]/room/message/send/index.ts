@@ -2,7 +2,7 @@ import { debateMessages } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import { honoFactory } from '../../../factory'
 
-export const sendMessageRoute = honoFactory.createApp().post('/message/send', async (c) => {
+export const sendMessageRoute = honoFactory.createApp().post('/', async (c) => {
   const { roomId, playerId, message } = await c.req.json<{
     roomId: string
     playerId: string
