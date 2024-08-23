@@ -32,7 +32,7 @@ const createRoomPage = () => {
           onChange={(e) => setTopic(e.target.value)} // ユーザーが入力した内容を state に保存
         />
       </div>
-      <button onClick={fetchRoom} type="submit">
+      <button onClick={fetchRoom} type="button">
         roomを作成
       </button>
     </div>

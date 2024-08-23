@@ -5,10 +5,11 @@ import { useState } from 'react'
 const Debate = ({ room, user }: { room: Room; user: string }) => {
   const [message, setMessage] = useState('')
   const sendMessage = async () => {
-    await apiClient.api.room.message.send.$post({
+    await apiClient.api.message.send.$post({
       json: { roomId: room.id, playerId: user, message: message },
     })
   }
+
   return (
     <div>
       <input
@@ -16,7 +17,7 @@ const Debate = ({ room, user }: { room: Room; user: string }) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)} // ユーザーが入力した内容を state に保存
       />
-      <button onClick={sendMessage} type="submit">
+      <button onClick={sendMessage} type="button">
         送信
       </button>
     </div>

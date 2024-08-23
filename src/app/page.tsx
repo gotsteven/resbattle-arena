@@ -12,10 +12,10 @@ const Home = async () => {
       Hello, {PROJECT_NAME}
       <RoomList rooms={allRooms} />
       <div>
-        <Link href={'/'}>部屋を更新</Link>
+        <Link href="/">部屋を更新</Link>
       </div>
-      <Link href={'/room/create'}>部屋を作る</Link>
-      <Link href={'/auth/login'}>ログインする</Link>
+      <Link href="/room/create">部屋を作る</Link>
+      <Link href="/auth/login">ログインする</Link>
     </div>
   )
 }

@@ -2,11 +2,8 @@ import { handle } from 'hono/vercel'
 import { AIController } from './ai'
 import { honoFactory } from './factory'
 import { healthRoute } from './health'
-import { getRoomRoute } from './room/[roomId]'
-import { createRoomRoute } from './room/create'
-import { deleteRoomRoute } from './room/delete'
-import { sendMessageRoute } from './room/message/send'
-import { updateRoomRoute, updateRoomStatusRoute } from './room/update'
+import { messageRoute } from './message'
+import { roomRoute } from './room'
 
 export const runtime = 'edge'
 
@@ -21,6 +18,8 @@ const route = app
   .route('/room', updateRoomStatusRoute)
   .route('/room', sendMessageRoute)
   .route('/ai', AIController)
+  .route('/room', roomRoute)
+  .route('/message', messageRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)
