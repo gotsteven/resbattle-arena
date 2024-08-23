@@ -13,8 +13,7 @@ const route = app
   .route('/ai', AIController)
   .route('/health', healthRoute)
   .route('/room', roomRoute)
-  .route('/message',
-messageRoute)
+  .route('/message', messageRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)
