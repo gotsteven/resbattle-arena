@@ -4,6 +4,7 @@ import { healthRoute } from './health'
 import { getRoomRoute } from './room/[roomId]'
 import { createRoomRoute } from './room/create'
 import { deleteRoomRoute } from './room/delete'
+import { sendMessageRoute } from './room/message/send'
 import { updateRoomRoute, updateRoomStatusRoute } from './room/update'
 
 export const runtime = 'edge'
@@ -17,6 +18,7 @@ const route = app
   .route('/room', updateRoomRoute)
   .route('/room', deleteRoomRoute)
   .route('/room', updateRoomStatusRoute)
+  .route('/room', sendMessageRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)

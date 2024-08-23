@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const createRoomPage = () => {
-  const [topic, setTopic] = useState<string>('')
+  const [topic, setTopic] = useState('')
   const { data: session } = useSession()
   const router = useRouter()
   if (!session) {

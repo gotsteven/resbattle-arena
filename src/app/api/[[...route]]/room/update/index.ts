@@ -24,10 +24,10 @@ export const updateRoomStatusRoute = honoFactory.createApp().post('/update/statu
     id: string
     status: string
   }>()
-  const roomData = await dbClient
+  const [roomData] = await dbClient
     .update(debateRooms)
     .set({ status: status })
     .where(eq(debateRooms.id, id))
     .returning()
-  return c.json(roomData[0])
+  return c.json(roomData)
 })

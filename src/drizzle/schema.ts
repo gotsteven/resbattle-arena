@@ -1,4 +1,13 @@
-import { boolean, integer, pgTable, primaryKey, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  integer,
+  pgTable,
+  primaryKey,
+  serial,
+  text,
+  timestamp,
+  uuid,
+} from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
 export const users = pgTable('user', {
@@ -88,4 +97,11 @@ export const debateRooms = pgTable('debate_rooms', {
   player1_position: text('player1_position'), //　賛成反対
   player2_position: text('player2_position'),
   status: text('status').notNull().default('waiting'), // 部屋のステータス
+})
+
+export const debateMessages = pgTable('debate_messages', {
+  id: serial('msg_id').primaryKey(),
+  room_id: uuid('id'), // 部屋のUUID
+  player_id: text('player_id').notNull(),
+  message: text('message').notNull(),
 })

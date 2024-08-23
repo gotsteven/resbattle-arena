@@ -6,7 +6,7 @@ export const createRoomRoute = honoFactory.createApp().post('/create', async (c)
   const { topic, player1_id } = await c.req.json()
   try {
     // 部屋の作成
-    const newRoom = await dbClient
+    const [newRoom] = await dbClient
       .insert(debateRooms)
       .values({
         topic,
@@ -14,7 +14,7 @@ export const createRoomRoute = honoFactory.createApp().post('/create', async (c)
       })
       .returning()
 
-    return c.json({ room_id: newRoom[0].id, status: newRoom[0].status }, 201)
+    return c.json({ room_id: newRoom.id, status: newRoom.status }, 201)
   } catch (error) {
     console.error('Error creating room:', error)
     return c.json({ error: 'Internal server error' }, 500)
