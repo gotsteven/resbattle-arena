@@ -14,8 +14,10 @@
     "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.51",
     "@auth/drizzle-adapter": "^1.4.2",
     "@vercel/postgres": "^0.9.0",
+    "ai": "^3.3.15",
     "drizzle-orm": "^0.33.0",
     "hono": "^4.5.6",
     "next": "14.2.5",
@@ -43,5 +45,6 @@
   },
   "volta": {
     "node": "20.16.0"
-  }
+  },
+  "packageManager": "pnpm@9.7.1+sha512.faf344af2d6ca65c4c5c8c2224ea77a81a5e8859cbc4e06b1511ddce2f0151512431dd19e6aff31f2c6a8f5f2aced9bd2273e1fed7dd4de1868984059d2c4247"
 }
