@@ -1,8 +1,8 @@
-import { honoFactory } from '../../factory'
+import { honoFactory } from '../factory'
 import { getRoomRoute } from './get'
 import { sendMessageRoute } from './send'
 
-export const roomMessageRoute = honoFactory
+export const messageRoute = honoFactory
   .createApp()
   .route('/get', getRoomRoute)
   .route('/send', sendMessageRoute)

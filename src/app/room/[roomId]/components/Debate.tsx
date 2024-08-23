@@ -5,10 +5,11 @@ import { useState } from 'react'
 const Debate = ({ room, user }: { room: Room; user: string }) => {
   const [message, setMessage] = useState('')
   const sendMessage = async () => {
-    await apiClient.api.room.message.send.$post({
+    await apiClient.api.message.send.$post({
       json: { roomId: room.id, playerId: user, message: message },
     })
   }
+
   return (
     <div>
       <input
