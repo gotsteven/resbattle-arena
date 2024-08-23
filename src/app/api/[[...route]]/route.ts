@@ -10,16 +10,11 @@ export const runtime = 'edge'
 const app = honoFactory.createApp().basePath('/api')
 
 const route = app
-  .route('/health', healthRoute)
-  .route('/room', createRoomRoute)
-  .route('/room', getRoomRoute)
-  .route('/room', updateRoomRoute)
-  .route('/room', deleteRoomRoute)
-  .route('/room', updateRoomStatusRoute)
-  .route('/room', sendMessageRoute)
   .route('/ai', AIController)
+  .route('/health', healthRoute)
   .route('/room', roomRoute)
-  .route('/message', messageRoute)
+  .route('/message',
+messageRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)
