@@ -1,18 +1,28 @@
 import { debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
+import { zValidator } from '@hono/zod-validator'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 import { honoFactory } from '../../factory'
+
+const requestBodySchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  p1_pos: z.string(),
+  p2_pos: z.string(),
+  p2_id: z.string(),
+})
+
+const statusRequestBodySchema = z.object({
+  id: z.string(),
+  status: z.string(),
+})
 
 export const updateRoomRoute = honoFactory
   .createApp()
-  .post('/', async (c) => {
-    const { status, p2_id, id, p2_pos, p1_pos } = await c.req.json<{
-      id: string
-      status: string
-      p1_pos: string
-      p2_pos: string
-      p2_id: string
-    }>()
+  .post('/', zValidator('json', requestBodySchema), async (c) => {
+    const { status, p2_id, id, p2_pos, p1_pos } = c.req.valid('json')
+
     const roomData = await dbClient
       .update(debateRooms)
       .set({
@@ -25,11 +35,8 @@ export const updateRoomRoute = honoFactory
       .returning()
     return c.json(roomData[0])
   })
-  .post('/status', async (c) => {
-    const { id, status } = await c.req.json<{
-      id: string
-      status: string
-    }>()
+  .post('/status', zValidator('json', statusRequestBodySchema), async (c) => {
+    const { id, status } = c.req.valid('json')
     const [roomData] = await dbClient
       .update(debateRooms)
       .set({ status: status })
