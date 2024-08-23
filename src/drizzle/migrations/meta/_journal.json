@@ -8,6 +8,27 @@
       "when": 1724343075911,
       "tag": "0000_military_freak",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724344057617,
+      "tag": "0001_wakeful_sentry",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724401377424,
+      "tag": "0002_married_wilson_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724403099251,
+      "tag": "0003_futuristic_maria_hill",
+      "breakpoints": true
     }
   ]
 }

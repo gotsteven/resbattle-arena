@@ -11,6 +11,5 @@ export const getRoomRoute = honoFactory.createApp().get('/:roomId', async (c) =>
     })
     .from(debateRooms)
     .where(eq(debateRooms.id, roomId))
-    .execute()
   return c.json(roomTopic[0].topic)
 })
