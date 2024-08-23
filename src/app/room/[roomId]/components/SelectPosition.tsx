@@ -12,12 +12,12 @@ const SelectPosition = ({ user, roomId }: { user: string; roomId: string }) => {
     <div>
       賛成反対を選択してください
       <div>
-        <button type="submit" onClick={() => updateRoom('agree')}>
+        <button type="button" onClick={() => updateRoom('agree')}>
           賛成
         </button>
       </div>
       <div>
-        <button type="submit" onClick={() => updateRoom('disagree')}>
+        <button type="button" onClick={() => updateRoom('disagree')}>
           反対
         </button>
       </div>

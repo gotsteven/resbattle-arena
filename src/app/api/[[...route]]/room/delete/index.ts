@@ -3,7 +3,7 @@ import { dbClient } from '@/lib/dbClient'
 import { eq } from 'drizzle-orm'
 import { honoFactory } from '../../factory'
 
-export const deleteRoomRoute = honoFactory.createApp().post('/delete', async (c) => {
+export const deleteRoomRoute = honoFactory.createApp().post('/', async (c) => {
   const { id } = await c.req.json<{
     id: string
   }>()
