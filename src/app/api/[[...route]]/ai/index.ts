@@ -1,32 +1,22 @@
+import { createOpenAI } from '@ai-sdk/openai';
+import { generateText } from 'ai';
 import { honoFactory } from '../factory';
 
-// export async function AIController(request: Request) {
-//   const body = await request.json();
-//   const prompt = body.prompt || 'Default prompt';
+const openai = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  compatibility: 'strict', // strictモードを使用する場合
+});
 
-//   const result = await generateText({
-//     model,
-//     prompt,
-//   });
-
-//   return c.json({ result }, 201)
-// }
-
-// {
-//    "status":"201",
-//    "prompt":"konnn"
-// }
+const model = openai('gpt-4o-mini')
 
 export const AIController = honoFactory.createApp().post('/', async (c) => {
   const { prompt } = await c.req.json()
   try {
-  //     const result = await generateText({
-  //   model,
-  //   prompt,
-  // });
-  const result = "ok"
-
-    return c.json({ result })
+      const res = await generateText({
+    model,
+    prompt,
+  });
+    return c.json({ response: res })
   } catch (error) {
     console.error('Error creating room:', error)
     return c.json({ error: 'Internal server error' }, 500)

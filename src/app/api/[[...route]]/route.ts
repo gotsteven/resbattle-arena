@@ -1,4 +1,5 @@
 import { handle } from 'hono/vercel'
+import { AIController } from './ai'
 import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { getRoomRoute } from './room/[roomId]'
@@ -19,6 +20,7 @@ const route = app
   .route('/room', deleteRoomRoute)
   .route('/room', updateRoomStatusRoute)
   .route('/room', sendMessageRoute)
+  .route('/ai', AIController)
 
 export const GET = handle(app)
 export const POST = handle(app)
