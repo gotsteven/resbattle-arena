@@ -1,5 +1,8 @@
+import { dbClient } from '@/lib/dbClient'
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateText } from 'ai'
+import { and, eq } from 'drizzle-orm/expressions'
+import { debateMessages } from '../../../../drizzle/schema'
 import { honoFactory } from '../factory'
 
 const openai = createOpenAI({
@@ -9,16 +12,25 @@ const openai = createOpenAI({
 
 const model = openai('gpt-4o-mini')
 
-export const AIController = honoFactory.createApp().post('/', async (c) => {
-  const { prompt } = await c.req.json()
+export const AIController = honoFactory.createApp().post('/:roomId/:playerId', async (c) => {
+  const { roomId, playerId } = c.req.param()
   try {
+    const messages = await dbClient
+      .select()
+      .from(debateMessages)
+      .where(and(eq(debateMessages.room_id, roomId), eq(debateMessages.player_id, playerId)))
+      .orderBy(debateMessages.id)
+
+    const prompt = messages.map((msg) => `Player: ${msg.message}`).join('\n')
+
     const res = await generateText({
       model,
       prompt,
     })
+
     return c.json({ response: res })
   } catch (error) {
-    console.error('Error creating room:', error)
+    console.error('Error processing AI request:', error)
     return c.json({ error: 'Internal server error' }, 500)
   }
 })
