@@ -2,7 +2,7 @@ import { useChat } from '@/hooks/useChat'
 import type { Room } from '@/types/types'
 
 const Messages = ({ room }: { room: Room }) => {
-  const { messages, isError, isLoading } = useChat()
+  const { messages, isError, isLoading } = useChat(room.id)
 
   return (
     <div>
