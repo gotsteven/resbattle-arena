@@ -14,6 +14,7 @@ const model = openai('gpt-4o-mini')
 
 export const AIController = honoFactory.createApp().post('/:roomId/:playerId', async (c) => {
   const { roomId, playerId } = c.req.param()
+
   try {
     const messages = await dbClient
       .select()
@@ -25,7 +26,7 @@ export const AIController = honoFactory.createApp().post('/:roomId/:playerId', a
 
     const res = await generateText({
       model,
-      prompt,
+      prompt: `以下の内容をあなたが判断して日本語で返答してください。\n\n${prompt}`,
     })
 
     return c.json({ response: res })
