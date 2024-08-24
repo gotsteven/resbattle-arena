@@ -1,7 +1,7 @@
 import { dbClient } from '@/lib/dbClient'
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateText } from 'ai'
-import { and, eq } from 'drizzle-orm/expressions'
+import { and, eq } from 'drizzle-orm'
 import { debateMessages } from '../../../../drizzle/schema'
 import { honoFactory } from '../factory'
 
