@@ -100,7 +100,7 @@ export const debateRooms = pgTable('debate_rooms', {
 })
 
 export const debateMessages = pgTable('debate_messages', {
-  id: serial('msg_id').primaryKey(),
+  msg_id: serial('msg_id').primaryKey(),
   room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
   player_id: text('player_id').notNull(),
   message: text('message').notNull(),
