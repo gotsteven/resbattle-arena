@@ -11,7 +11,7 @@ import {
 import type { AdapterAccountType } from 'next-auth/adapters'
 
 export const users = pgTable('user', {
-  id: uuid('id')
+  id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text('name'),
@@ -23,7 +23,7 @@ export const users = pgTable('user', {
 export const accounts = pgTable(
   'account',
   {
-    userId: uuid('userId')
+    userId: text('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').$type<AdapterAccountType>().notNull(),
@@ -46,7 +46,7 @@ export const accounts = pgTable(
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').primaryKey(),
-  userId: uuid('userId')
+  userId: text('userId')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   expires: timestamp('expires', { mode: 'date' }).notNull(),
@@ -101,7 +101,7 @@ export const debateRooms = pgTable('debate_rooms', {
 
 export const debateMessages = pgTable('debate_messages', {
   id: serial('msg_id').primaryKey(),
-  room_id: uuid('id'), // 部屋のUUID
+  room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
   player_id: text('player_id').notNull(),
   message: text('message').notNull(),
 })
