@@ -19,7 +19,7 @@ export const AIController = honoFactory.createApp().post('/:roomId/:playerId', a
       .select()
       .from(debateMessages)
       .where(and(eq(debateMessages.room_id, roomId), eq(debateMessages.player_id, playerId)))
-      .orderBy(debateMessages.id)
+      .orderBy(debateMessages.msg_id)
 
     const prompt = messages.map((msg) => `Player: ${msg.message}`).join('\n')
 
