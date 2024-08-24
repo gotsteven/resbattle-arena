@@ -8,16 +8,16 @@ import { Messages } from './messages'
 
 type RoomGameProps = {
   room: Room
-  user: string
+  userId: string
 }
 
-export const RoomGame: FC<RoomGameProps> = ({ room, user }) => {
+export const RoomGame: FC<RoomGameProps> = ({ room, userId }) => {
   const [message, setMessage] = useState('')
   const { latestMsg, isError, isLoading } = useTurn(room.id)
 
   const sendMessage = async () => {
     await apiClient.api.message.send.$post({
-      json: { roomId: room.id, playerId: user, message: message },
+      json: { roomId: room.id, playerId: userId, message: message },
     })
     setMessage('')
   }
