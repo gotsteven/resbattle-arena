@@ -42,6 +42,9 @@ const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
     return <RoomWaiting room={room} userPosition={userStatus} userId={userId} />
   if (room.status === 'ready') return <RoomReady room={room} userPosition={userStatus} />
   if (room.status === 'playing') return <RoomGame room={room} user={userId} />
+  if (room?.status === 'end') {
+    return <div>ゲームが終了しました ここに結果を表示予定</div>
+  }
 }
 
 export default roomPage

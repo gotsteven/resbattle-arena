@@ -1,8 +1,15 @@
 import { useChat } from '@/hooks/useChat'
+import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
+const updateStatus = async (roomId: string) => {
+  await apiClient.api.room.update.status.$post({ json: { status: 'end', id: roomId } })
+}
 
 export const Messages = ({ room }: { room: Room }) => {
   const { messages, isError, isLoading } = useChat(room.id)
+  if (messages && messages[0].room_id === room.id && messages?.length === 10) {
+    updateStatus(room.id)
+  }
 
   return (
     <div>
