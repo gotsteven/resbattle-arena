@@ -1,6 +1,6 @@
 import { apiClient } from '@/lib/apiClient'
 
-const SelectPosition = ({ user, roomId }: { user: string; roomId: string }) => {
+export const SelectPosition = ({ user, roomId }: { user: string; roomId: string }) => {
   const updateRoom = async (p2_pos: string) => {
     const p1_pos = p2_pos === 'agree' ? 'disagree' : 'agree'
     const p2_id = user
@@ -24,5 +24,3 @@ const SelectPosition = ({ user, roomId }: { user: string; roomId: string }) => {
     </div>
   )
 }
-
-export default SelectPosition

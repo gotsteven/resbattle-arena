@@ -4,9 +4,9 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import useSWR from 'swr'
-import Debate from './components/Debate'
-import RoomData from './components/RoomData'
-import SelectPosition from './components/SelectPosition'
+import { Debate } from './debate'
+import { RoomData } from './room-data'
+import { SelectPosition } from './select-position'
 
 const fetchRoomData = async (roomId: string) => {
   const res = await apiClient.api.room[':roomId'].$get({ param: { roomId } })

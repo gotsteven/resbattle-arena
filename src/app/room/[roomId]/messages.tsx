@@ -1,7 +1,7 @@
 import { useChat } from '@/hooks/useChat'
 import type { Room } from '@/types/types'
 
-const Messages = ({ room }: { room: Room }) => {
+export const Messages = ({ room }: { room: Room }) => {
   const { messages, isError, isLoading } = useChat(room.id)
 
   return (
@@ -24,5 +24,3 @@ const Messages = ({ room }: { room: Room }) => {
     </div>
   )
 }
-
-export default Messages

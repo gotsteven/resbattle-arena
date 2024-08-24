@@ -1,9 +1,9 @@
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
 import { useState } from 'react'
-import Messages from './Messages'
+import { Messages } from './messages'
 
-const Debate = ({ room, user }: { room: Room; user: string }) => {
+export const Debate = ({ room, user }: { room: Room; user: string }) => {
   const [message, setMessage] = useState('')
   const sendMessage = async () => {
     await apiClient.api.message.send.$post({
@@ -26,5 +26,3 @@ const Debate = ({ room, user }: { room: Room; user: string }) => {
     </div>
   )
 }
-
-export default Debate

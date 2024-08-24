@@ -1,6 +1,6 @@
 import type { Room } from '@/types/types'
 
-const RoomData = ({ room, player_id }: { room: Room; player_id: string }) => {
+export const RoomData = ({ room, player_id }: { room: Room; player_id: string }) => {
   return (
     <div>
       RoomPage
@@ -19,5 +19,3 @@ const RoomData = ({ room, player_id }: { room: Room; player_id: string }) => {
     </div>
   )
 }
-
-export default RoomData
