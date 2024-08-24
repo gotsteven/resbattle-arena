@@ -14,7 +14,7 @@ export const useChat = (roomId: string) => {
     error,
     isLoading,
   } = useSWR(
-    apiClient.api.message.get.$url,
+    apiClient.api.message.get.$url().toString(),
     fetcher({
       query: { roomId },
     }),
