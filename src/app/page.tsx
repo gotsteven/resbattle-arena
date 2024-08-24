@@ -2,11 +2,15 @@ import { auth } from '@/auth'
 import RoomList from '@/components/RoomList'
 import { debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
+import { eq } from 'drizzle-orm'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 const Home = async () => {
-  const allRooms = await dbClient.select().from(debateRooms)
+  const allRooms = await dbClient
+    .select()
+    .from(debateRooms)
+    .where(eq(debateRooms.status, 'waiting'))
   const session = await auth()
 
   if (session === null) redirect('/auth/login')
