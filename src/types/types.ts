@@ -7,3 +7,9 @@ export interface Room {
   player1_position: string | null
   player2_position: string | null
 }
+export type Message = {
+  msg_id: number
+  room_id: string | null
+  player_id: string
+  message: string
+}
