@@ -90,6 +90,9 @@ const roomPage = ({ params }: { params: { roomId: string } }) => {
       </div>
     )
   }
+  if (room?.status === 'end') {
+    return <div>ゲームが終了しました ここに結果を表示予定</div>
+  }
 }
 
 export default roomPage
