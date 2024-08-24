@@ -13,7 +13,7 @@ const Home = async () => {
     .where(eq(debateRooms.status, 'waiting'))
   const session = await auth()
 
-  if (session === null) redirect('/auth/login')
+  if (session === null || session === undefined) redirect('/auth/login')
 
   return (
     <div className="flex flex-col gap-y-6 bg-background text-foreground">
