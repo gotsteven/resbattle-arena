@@ -1,6 +1,7 @@
 'use client'
 import { IconButton } from '@/components/ui/IconButton'
 import { Loading } from '@/components/ui/Loading'
+import TextContent from '@/components/ui/textContent'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
@@ -48,7 +49,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   }, [messages, room.player1_id, room.player2_id])
 
   return (
-    <div className="relative flex grow flex-col gap-y-8 pb-16">
+    <div className="relative flex h-full grow flex-col gap-y-8 pb-16">
       <div className="flex flex-col items-center gap-y-2">
         <h2 className="font-bold text-lg">
           <span>｢{room.topic}について｣</span> -{' '}
@@ -61,18 +62,17 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         </p>
       </div>
       {isLoading || messages !== undefined ? (
-        <div className="flex flex-col gap-y-2">
+        <div className="flex flex-col gap-y-2 overflow-y-auto">
           {messages.map?.((message) => (
-            <div key={message.msg_id} className="flex">
-              <p
-                className={twJoin(
-                  'w-fit max-w-[80%] rounded-md p-2',
-                  message.player_id === enemyUserId && 'bg-background-50',
-                  message.player_id === userId && 'text ml-auto bg-accent text-white',
-                )}
-              >
-                {message.message}
-              </p>
+            <div
+              key={message.msg_id}
+              className={twJoin(
+                'w-fit max-w-[80%] rounded-md px-4 py-2',
+                message.player_id === enemyUserId && 'bg-background-50',
+                message.player_id === userId && 'text ml-auto bg-accent text-white',
+              )}
+            >
+              <TextContent textContent={message.message} />
             </div>
           ))}
         </div>
@@ -80,9 +80,9 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         <Loading />
       )}
       <div className="absolute bottom-0 flex w-full gap-x-2">
-        <input
-          type="text"
+        <textarea
           value={messageInput}
+          rows={1}
           disabled={isSending || turnUser !== userId}
           onChange={(e) => setMessageInput(e.currentTarget.value)}
           placeholder={turnUser === userId ? 'メッセージを送信' : '相手のターンです'}
