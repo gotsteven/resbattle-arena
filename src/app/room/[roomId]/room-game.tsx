@@ -20,15 +20,13 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
-
   const myPosition = userPosition === 1 ? room.player1_position : room.player2_position
-
-  const { messages, setMessages, isLoading } = useMessage(room.id)
-
+  const { messages, isError, isLoading } = useMessage(room.id)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const sendMessage = async () => {
+    setMessageInput('')
     setIsSending(true)
     await apiClient.api.message.send
       .$post({
@@ -36,17 +34,12 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       })
       .finally(() => {
         setIsSending(false)
-        setMessageInput('')
-        setMessages((prev) => [
-          ...prev,
-          { player_id: userId, room_id: room.id, message: messageInput },
-        ])
       })
   }
 
   const turnUser = useMemo(() => {
     if (messages?.length === 0) return room.player2_id
-    const lastMessageUser = messages.at(-1)?.player_id
+    const lastMessageUser = messages?.at(-1)?.player_id
     return lastMessageUser === room.player1_id ? room.player2_id : room.player1_id
   }, [messages, room.player1_id, room.player2_id])
 
@@ -58,6 +51,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     }
   }, [messageInput])
 
+  if (isLoading) return <Loading />
   return (
     <div className="relative flex h-full grow flex-col gap-y-8 pb-16">
       <div className="flex flex-col items-center gap-y-2">
@@ -73,7 +67,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       </div>
       {isLoading || messages !== undefined ? (
         <div className="flex flex-col gap-y-2 overflow-y-auto">
-          {messages.map?.((message) => (
+          {messages?.map?.((message) => (
             <div
               key={message.msg_id}
               className={twJoin(
