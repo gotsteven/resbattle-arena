@@ -1,8 +1,9 @@
 import { honoFactory } from '../factory'
-import { getRoomRoute } from './get'
+import { getLatestMessageRoute, getMessageRoute } from './get'
 import { sendMessageRoute } from './send'
 
 export const messageRoute = honoFactory
   .createApp()
-  .route('/get', getRoomRoute)
+  .route('/get', getMessageRoute)
+  .route('/get', getLatestMessageRoute)
   .route('/send', sendMessageRoute)
