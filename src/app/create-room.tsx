@@ -1,7 +1,7 @@
 'use client'
 import { IconButton } from '@/components/ui/IconButton'
 import { apiClient } from '@/lib/apiClient'
-import { IconHomePlus } from '@tabler/icons-react'
+import { IconHomePlus, IconLoader2 } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useCallback, useState } from 'react'
@@ -9,6 +9,7 @@ import { twJoin } from 'tailwind-merge'
 
 export const CreateRoom = () => {
   const [topic, setTopic] = useState('')
+  const [isCreating, setIsCreating] = useState(false)
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -22,6 +23,7 @@ export const CreateRoom = () => {
   }
 
   const createRoomHandler = async () => {
+    setIsCreating(true)
     const res = await apiClient.api.room.create.$post({
       json: { player1_id: session.user.id, topic: topic },
     })
@@ -49,8 +51,9 @@ export const CreateRoom = () => {
         <IconButton
           onClick={createRoomHandler}
           label="作成"
-          icon={IconHomePlus}
+          icon={isCreating ? IconLoader2 : IconHomePlus}
           disabled={topic.length === 0}
+          iconClassName={twJoin(isCreating && 'animate-spin text-accent')}
         />
       </div>
     </>
