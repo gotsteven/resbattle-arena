@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+console.log('process.env.BASE_URL', process.env.BASE_URL)
 export const BASE_URL =
   process.env.VERCEL_URL === undefined
     ? z.string().url().parse(process.env.BASE_URL)
