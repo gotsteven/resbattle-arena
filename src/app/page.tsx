@@ -17,6 +17,8 @@ const Home = async () => {
 
   return (
     <div className="flex flex-col gap-y-6 bg-background text-foreground">
+      <p>VEERCEL_URL: {process.env.VERCEL_URL}</p>
+      <p>BASE_URL: {process.env.BASE_URL}</p>
       <CreateRoom />
       <RoomList rooms={allRooms} />
     </div>

@@ -14,6 +14,8 @@ const LogIn = async () => {
 
   return (
     <form action={signInAction} className="flex flex-col items-center gap-y-4">
+      <p>VEERCEL_URL: {process.env.VERCEL_URL}</p>
+      <p>BASE_URL: {process.env.BASE_URL}</p>
       <p>Googleと連携してログイン</p>
       <IconButton type="submit" icon={IconBrandGoogleFilled} label="Googleログイン" />
     </form>
