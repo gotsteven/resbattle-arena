@@ -2,7 +2,7 @@ import { dbClient } from '@/lib/dbClient'
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateText } from 'ai'
 import { and, eq } from 'drizzle-orm'
-import { debateMessages } from '../../../../drizzle/schema'
+import { debateMessages, debateRooms } from '../../../../drizzle/schema'
 import { honoFactory } from '../factory'
 
 const openai = createOpenAI({
@@ -16,13 +16,22 @@ export const AIController = honoFactory.createApp().post('/:roomId/:playerId', a
   const { roomId, playerId } = c.req.param()
 
   try {
+    const room = await dbClient
+      .select({
+        topic: debateRooms.topic,
+      })
+      .from(debateRooms)
+      .where(eq(debateRooms.id, roomId))
+
+    const topic = room[0].topic
+
     const messages = await dbClient
       .select()
       .from(debateMessages)
       .where(and(eq(debateMessages.room_id, roomId), eq(debateMessages.player_id, playerId)))
       .orderBy(debateMessages.msg_id)
 
-    const prompt = messages.map((msg) => `Player: ${msg.message}`).join('\n')
+    const prompt = `トピック: ${topic}\n\n${messages.map((msg) => `プレイヤー: ${msg.message}`).join('\n')}\n\nこのトピックについてそれぞれの発言内容を判断した上で返答してください。`
 
     const res = await generateText({
       model,
