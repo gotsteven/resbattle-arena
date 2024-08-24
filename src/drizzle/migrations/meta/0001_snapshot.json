@@ -1,6 +1,6 @@
 {
-  "id": "e2b0f473-7391-48d2-af29-82d0dcb9bce1",
-  "prevId": "ae1cee8f-1c3c-4dcf-bfdc-4c079e424052",
+  "id": "96c27900-afe3-4235-b678-ad6544968a2d",
+  "prevId": "3aceab1f-bb62-48ce-aeef-ce635151eb66",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -114,7 +114,7 @@
         },
         "userId": {
           "name": "userId",
-          "type": "text",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -190,6 +190,54 @@
         }
       }
     },
+    "public.debate_messages": {
+      "name": "debate_messages",
+      "schema": "",
+      "columns": {
+        "msg_id": {
+          "name": "msg_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player_id": {
+          "name": "player_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "debate_messages_id_debate_rooms_id_fk": {
+          "name": "debate_messages_id_debate_rooms_id_fk",
+          "tableFrom": "debate_messages",
+          "tableTo": "debate_rooms",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.debate_rooms": {
       "name": "debate_rooms",
       "schema": "",
@@ -214,6 +262,18 @@
         },
         "player2_id": {
           "name": "player2_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player1_position": {
+          "name": "player1_position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player2_position": {
+          "name": "player2_position",
           "type": "text",
           "primaryKey": false,
           "notNull": false

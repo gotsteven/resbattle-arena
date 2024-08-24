@@ -26,11 +26,20 @@ CREATE TABLE IF NOT EXISTS "authenticator" (
 	CONSTRAINT "authenticator_credentialID_unique" UNIQUE("credentialID")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "debate_messages" (
+	"msg_id" serial PRIMARY KEY NOT NULL,
+	"id" uuid,
+	"player_id" text NOT NULL,
+	"message" text NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "debate_rooms" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"topic" text NOT NULL,
 	"player1_id" text NOT NULL,
 	"player2_id" text,
+	"player1_position" text,
+	"player2_position" text,
 	"status" text DEFAULT 'waiting' NOT NULL
 );
 --> statement-breakpoint

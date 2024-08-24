@@ -70,7 +70,7 @@ export const authenticators = pgTable(
   'authenticator',
   {
     credentialID: text('credentialID').notNull().unique(),
-    userId: text('userId')
+    userId: uuid('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     providerAccountId: text('providerAccountId').notNull(),
@@ -101,7 +101,7 @@ export const debateRooms = pgTable('debate_rooms', {
 
 export const debateMessages = pgTable('debate_messages', {
   id: serial('msg_id').primaryKey(),
-  room_id: uuid('id'), // 部屋のUUID
+  room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
   player_id: text('player_id').notNull(),
   message: text('message').notNull(),
 })
