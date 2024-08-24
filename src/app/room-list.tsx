@@ -1,16 +1,25 @@
 import { users } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import type { Room } from '@/types/types'
-import { IconUser } from '@tabler/icons-react'
+import { IconRefresh, IconUser } from '@tabler/icons-react'
 import { eq } from 'drizzle-orm'
 import Link from 'next/link'
+import { LinkButton } from '../components/ui/LinkButton'
 
-const RoomList = ({ rooms }: { rooms: Room[] }) => {
+export const RoomList = ({ rooms }: { rooms: Room[] }) => {
   if (rooms.length === 0) return <div>部屋がありません</div>
 
   return (
     <>
-      <h2>部屋一覧</h2>
+      <div className="flex items-center gap-x-4">
+        <h2 className="shrink grow">部屋一覧</h2>
+        <LinkButton
+          href="/"
+          icon={<IconRefresh size={20} />}
+          aria-label="部屋を更新"
+          className="bg-transparent"
+        />
+      </div>
       <div className="flex flex-col gap-y-4">
         {rooms.map(async (room) => {
           const [{ name }] = await dbClient
@@ -35,5 +44,3 @@ const RoomList = ({ rooms }: { rooms: Room[] }) => {
     </>
   )
 }
-
-export default RoomList
