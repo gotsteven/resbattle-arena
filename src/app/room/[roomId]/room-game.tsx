@@ -1,5 +1,6 @@
 'use client'
 import { IconButton } from '@/components/ui/IconButton'
+import { Loading } from '@/components/ui/Loading'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
@@ -21,7 +22,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
 
   const myPosition = userPosition === 1 ? room.player1_position : room.player2_position
 
-  const { messages, setMessages } = useMessage(room.id)
+  const { messages, setMessages, isLoading } = useMessage(room.id)
 
   const [isSending, setIsSending] = useState(false)
   const sendMessage = async () => {
@@ -59,21 +60,25 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
           vs <IconUser size={20} /> {enemyUser?.name}
         </p>
       </div>
-      <div className="flex flex-col gap-y-2">
-        {messages?.map?.((message) => (
-          <div key={message.msg_id} className="flex">
-            <p
-              className={twJoin(
-                'w-fit max-w-[80%] rounded-md p-2',
-                message.player_id === enemyUserId && 'bg-background-50',
-                message.player_id === userId && 'text ml-auto bg-accent text-white',
-              )}
-            >
-              {message.message}
-            </p>
-          </div>
-        ))}
-      </div>
+      {isLoading || messages !== undefined ? (
+        <div className="flex flex-col gap-y-2">
+          {messages.map?.((message) => (
+            <div key={message.msg_id} className="flex">
+              <p
+                className={twJoin(
+                  'w-fit max-w-[80%] rounded-md p-2',
+                  message.player_id === enemyUserId && 'bg-background-50',
+                  message.player_id === userId && 'text ml-auto bg-accent text-white',
+                )}
+              >
+                {message.message}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <Loading />
+      )}
       <div className="absolute bottom-0 flex w-full gap-x-2">
         <input
           type="text"

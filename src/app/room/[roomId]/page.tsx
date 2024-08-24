@@ -1,4 +1,5 @@
 'use client'
+import { Loading } from '@/components/ui/Loading'
 import { useRoom } from '@/hooks/useRoom'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -12,11 +13,13 @@ const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
-  if (session === null || session === undefined) {
+  if (session === undefined) return <Loading />
+
+  if (session === null) {
     router.push('/')
     return <p>redirecting...</p>
   }
-  if (room === undefined) return <p>loading...</p>
+  if (room === undefined) return <Loading />
 
   const { id: userId } = session.user
 
