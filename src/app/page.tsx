@@ -2,6 +2,7 @@ import { RoomList } from '@/app/room-list'
 import { auth } from '@/auth'
 import { debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
+import { BASE_URL } from '@/lib/envValue'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { CreateRoom } from './create-room'
@@ -19,6 +20,7 @@ const Home = async () => {
     <div className="flex flex-col gap-y-6 bg-background text-foreground">
       <p>VEERCEL_URL: {process.env.VERCEL_URL}</p>
       <p>BASE_URL: {process.env.BASE_URL}</p>
+      {BASE_URL}
       <CreateRoom />
       <RoomList rooms={allRooms} />
     </div>
