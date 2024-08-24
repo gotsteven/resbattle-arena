@@ -10,7 +10,7 @@ export const useUser = (userId: string) => {
   }
 
   const { data, error, isLoading } = useSWR(
-    apiClient.api.message.get.$url().toString(),
+    `get-user-${userId}`,
     fetcher({
       query: { userId },
     }),
