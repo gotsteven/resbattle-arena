@@ -7,7 +7,7 @@ import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
-import { type FC, useMemo, useState } from 'react'
+import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
 
 type RoomGameProps = {
@@ -26,6 +26,8 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const { messages, setMessages, isLoading } = useMessage(room.id)
 
   const [isSending, setIsSending] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   const sendMessage = async () => {
     setIsSending(true)
     await apiClient.api.message.send
@@ -47,6 +49,14 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     const lastMessageUser = messages.at(-1)?.player_id
     return lastMessageUser === room.player1_id ? room.player2_id : room.player1_id
   }, [messages, room.player1_id, room.player2_id])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [messageInput])
 
   return (
     <div className="relative flex h-full grow flex-col gap-y-8 pb-16">
@@ -81,8 +91,10 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       )}
       <div className="absolute bottom-0 flex w-full gap-x-2">
         <textarea
+          ref={textareaRef}
           value={messageInput}
           rows={1}
+          maxLength={400}
           disabled={isSending || turnUser !== userId}
           onChange={(e) => setMessageInput(e.currentTarget.value)}
           placeholder={turnUser === userId ? 'メッセージを送信' : '相手のターンです'}
@@ -90,6 +102,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
             'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
             'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             turnUser !== userId && 'cursor-not-allowed placeholder:text-accent-200',
+            'resize-none overflow-hidden',
           )}
         />
         <IconButton
