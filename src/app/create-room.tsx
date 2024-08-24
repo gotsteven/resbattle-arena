@@ -25,6 +25,7 @@ export const CreateRoom = () => {
     const res = await apiClient.api.room.create.$post({
       json: { player1_id: session.user.id, topic: topic },
     })
+    console.log(apiClient.api.room.create.$url().toJSON())
     if (res.ok) {
       const data = await res.json()
       router.push(`/room/${data.room_id}`)
