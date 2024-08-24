@@ -1,4 +1,5 @@
 'use client'
+import { Loading } from '@/components/ui/Loading'
 import { useRoom } from '@/hooks/useRoom'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -12,11 +13,13 @@ const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
-  if (session === null || session === undefined) {
+  if (session === undefined) return <Loading />
+
+  if (session === null) {
     router.push('/')
     return <p>redirecting...</p>
   }
-  if (room === undefined) return <p>loading...</p>
+  if (room === undefined) return <Loading />
 
   const { id: userId } = session.user
 
@@ -41,7 +44,8 @@ const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
   if (room.status === 'waiting')
     return <RoomWaiting room={room} userPosition={userStatus} userId={userId} />
   if (room.status === 'ready') return <RoomReady room={room} userPosition={userStatus} />
-  if (room.status === 'playing') return <RoomGame room={room} user={userId} />
+  if (room.status === 'playing')
+    return <RoomGame room={room} userId={userId} userPosition={userStatus} />
   if (room?.status === 'end') {
     return <div>ゲームが終了しました ここに結果を表示予定</div>
   }
