@@ -8,6 +8,13 @@
       "when": 1724463697866,
       "tag": "0000_hard_fixer",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724467234137,
+      "tag": "0006_exotic_switch",
+      "breakpoints": true
     }
   ]
 }
