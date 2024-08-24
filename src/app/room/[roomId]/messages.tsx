@@ -7,7 +7,8 @@ const updateStatus = async (roomId: string) => {
 
 export const Messages = ({ room }: { room: Room }) => {
   const { messages, isError, isLoading } = useChat(room.id)
-  if (messages && messages[0].room_id === room.id && messages?.length === 10) {
+
+  if (messages?.[0]?.room_id === room.id && messages?.length === 10) {
     updateStatus(room.id)
   }
 
