@@ -1,5 +1,4 @@
 import { handle } from 'hono/vercel'
-import { AIController } from './ai'
 import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { messageRoute } from './message'
@@ -11,7 +10,6 @@ export const runtime = 'edge'
 const app = honoFactory.createApp().basePath('/api')
 
 const route = app
-  .route('/ai', AIController)
   .route('/health', healthRoute)
   .route('/room', roomRoute)
   .route('/message', messageRoute)
