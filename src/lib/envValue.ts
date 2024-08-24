@@ -1,9 +1,10 @@
 import { z } from 'zod'
 
-export const BASE_URL =
-  process.env.VERCEL_URL === undefined
-    ? z.string().url().catch('http://localhost:3000').parse(process.env.BASE_URL)
-    : z.string().url().parse(`https://${process.env.VERCEL_URL}`)
+export const BASE_URL = z
+  .string()
+  .url()
+  .catch('http://localhost:3000')
+  .parse(process.env.NEXT_PUBLIC_BASE_URL)
 export const POSTGRES_URL = process.env.POSTGRES_URL
 export const POSTGRES_PRISMA_URL = process.env.POSTGRES_PRISMA_URL
 export const POSTGRES_URL_NO_SSL = process.env.POSTGRES_URL_NO_SSL
