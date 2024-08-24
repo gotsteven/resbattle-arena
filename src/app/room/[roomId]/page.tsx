@@ -1,95 +1,47 @@
 'use client'
-import { apiClient } from '@/lib/apiClient'
+import { useRoom } from '@/hooks/useRoom'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import useSWR from 'swr'
-import { Debate } from './debate'
-import { RoomData } from './room-data'
-import { SelectPosition } from './select-position'
+import { RoomGame } from './room-game'
+import { RoomReady } from './room-ready'
+import { RoomWaiting } from './room-waiting'
 
-const fetchRoomData = async (roomId: string) => {
-  const res = await apiClient.api.room[':roomId'].$get({ param: { roomId } })
-  const roomData = await res.json()
-  return roomData
-}
-
-const roomPage = ({ params }: { params: { roomId: string } }) => {
-  const roomId = params.roomId
-
-  const { data: room, error } = useSWR(roomId, fetchRoomData, {
-    refreshInterval: 1000,
-  })
+const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
+  const { room } = useRoom(roomId)
   const { data: session } = useSession()
   const router = useRouter()
 
-  if (!session) {
-    return <p>ログインしていません</p>
-  }
-  const user = session.user.id
-  const deleteRoom = async () => {
-    await apiClient.api.room.delete.$post({ json: { id: roomId } })
+  if (session === null || session === undefined) {
     router.push('/')
+    return <p>redirecting...</p>
   }
+  if (room === undefined) return <p>loading...</p>
 
-  const startGame = async () => {
-    await apiClient.api.room.update.status.$post({ json: { status: 'playing', id: roomId } })
-  }
-  if (room?.status === 'ready' || room?.status === 'waiting') {
-    if (user !== room?.player1_id && room?.player2_id === null) {
-      return (
-        <div>
-          <SelectPosition user={user} roomId={roomId} />
-        </div>
-      )
-    }
-    if (
-      (user !== room?.player1_id && user !== room?.player2_id && room?.player2_id !== null) ||
-      error
-    ) {
-      return (
-        <div>
-          この部屋は満員か削除されました。
-          <div>
-            <Link href="/">ホームに戻る</Link>
-          </div>
-        </div>
-      )
-    }
-    if (user === room.player1_id) {
-      return (
-        <div>
-          <RoomData room={room} player_id={user} />
-          <div>
-            <button type="button" onClick={startGame}>
-              ゲームを開始する
-            </button>
-          </div>
+  const { id: userId } = session.user
 
-          <div>
-            <button type="button" onClick={deleteRoom}>
-              部屋を削除する
-            </button>
-          </div>
-        </div>
-      )
-    }
-    if (user === room.player2_id) {
-      return (
-        <div>
-          <RoomData room={room} player_id={user} />
-        </div>
-      )
-    }
-  }
-  if (room?.status === 'playing') {
+  const userStatus = (() => {
+    if (room.player1_id === userId) return 1
+    if (room.player2_id === userId) return 2
+    if (room.player2_id === null) return 2
+    return null // 満員
+  })()
+
+  if (userStatus === null) {
     return (
-      <div>
-        ゲーム中です
-        <Debate room={room} user={user} />
-      </div>
+      <p>
+        この部屋は満員になりました。
+        <Link href="/" className="text-accent">
+          部屋一覧へ戻る
+        </Link>
+      </p>
     )
   }
+
+  if (room.status === 'waiting')
+    return <RoomWaiting room={room} userPosition={userStatus} userId={userId} />
+  if (room.status === 'ready') return <RoomReady room={room} userPosition={userStatus} />
+  if (room.status === 'playing') return <RoomGame room={room} user={userId} />
 }
 
 export default roomPage
