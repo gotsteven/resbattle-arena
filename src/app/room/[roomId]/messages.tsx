@@ -7,7 +7,7 @@ export const Messages = ({ room }: { room: Room }) => {
   return (
     <div>
       Messages
-      {messages ? (
+      {Array.isArray(messages) ? (
         messages.map((msg) => {
           return (
             <p
