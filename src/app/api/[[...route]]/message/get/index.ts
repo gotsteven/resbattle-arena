@@ -19,8 +19,6 @@ export const getMessageRoute = honoFactory
       .where(eq(debateMessages.room_id, roomId))
     return c.json(allMessages)
   })
-export const getLatestMessageRoute = honoFactory
-  .createApp()
   .get('/latest', zValidator('query', querySchema), async (c) => {
     const { roomId } = c.req.valid('query')
     const [Message] = await dbClient
