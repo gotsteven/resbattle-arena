@@ -1,10 +1,17 @@
+'use client'
+
 import { useTurn } from '@/hooks/useTurn'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
-import { useState } from 'react'
-import Messages from './Messages'
+import { type FC, useState } from 'react'
+import { Messages } from './messages'
 
-const Debate = ({ room, user }: { room: Room; user: string }) => {
+type RoomGameProps = {
+  room: Room
+  user: string
+}
+
+export const RoomGame: FC<RoomGameProps> = ({ room, user }) => {
   const [message, setMessage] = useState('')
   const { latestMsg, isError, isLoading } = useTurn(room.id)
 
@@ -35,5 +42,3 @@ const Debate = ({ room, user }: { room: Room; user: string }) => {
     </div>
   )
 }
-
-export default Debate

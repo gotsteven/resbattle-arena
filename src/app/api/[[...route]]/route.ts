@@ -4,6 +4,7 @@ import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { messageRoute } from './message'
 import { roomRoute } from './room'
+import { UserRouter } from './user'
 
 export const runtime = 'edge'
 
@@ -14,6 +15,7 @@ const route = app
   .route('/health', healthRoute)
   .route('/room', roomRoute)
   .route('/message', messageRoute)
+  .route('/user', UserRouter)
 
 export const GET = handle(app)
 export const POST = handle(app)

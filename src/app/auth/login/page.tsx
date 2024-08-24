@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 const LogIn = async () => {
   const session = await auth()
-  if (session !== null) redirect('/')
+  if (session !== null && session !== undefined) redirect('/')
 
   const signInAction = async () => {
     'use server'

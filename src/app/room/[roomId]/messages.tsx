@@ -5,16 +5,17 @@ const updateStatus = async (roomId: string) => {
   await apiClient.api.room.update.status.$post({ json: { status: 'end', id: roomId } })
 }
 
-const Messages = ({ room }: { room: Room }) => {
+export const Messages = ({ room }: { room: Room }) => {
   const { messages, isError, isLoading } = useChat(room.id)
-  if (messages && messages[0].room_id === room.id && messages?.length === 10) {
+
+  if (messages?.[0]?.room_id === room.id && messages?.length === 10) {
     updateStatus(room.id)
   }
 
   return (
     <div>
       Messages
-      {messages ? (
+      {Array.isArray(messages) ? (
         messages.map((msg) => {
           return (
             <p
@@ -31,5 +32,3 @@ const Messages = ({ room }: { room: Room }) => {
     </div>
   )
 }
-
-export default Messages
