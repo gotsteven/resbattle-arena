@@ -1,16 +1,19 @@
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
 import { useState } from 'react'
+import Messages from './Messages'
 
 const Debate = ({ room, user }: { room: Room; user: string }) => {
   const [message, setMessage] = useState('')
   const sendMessage = async () => {
-    await apiClient.api.room.message.send.$post({
+    await apiClient.api.message.send.$post({
       json: { roomId: room.id, playerId: user, message: message },
     })
+    setMessage('')
   }
   return (
     <div>
+      <Messages room={room} />
       <input
         type="text"
         value={message}

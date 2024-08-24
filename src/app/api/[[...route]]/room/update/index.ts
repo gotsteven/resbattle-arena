@@ -3,7 +3,7 @@ import { dbClient } from '@/lib/dbClient'
 import { eq } from 'drizzle-orm'
 import { honoFactory } from '../../factory'
 
-export const updateRoomRoute = honoFactory.createApp().post('/update', async (c) => {
+export const updateRoomRoute = honoFactory.createApp().post('/', async (c) => {
   const { status, p2_id, id, p2_pos, p1_pos } = await c.req.json<{
     id: string
     status: string
@@ -19,7 +19,7 @@ export const updateRoomRoute = honoFactory.createApp().post('/update', async (c)
   return c.json(roomData[0])
 })
 
-export const updateRoomStatusRoute = honoFactory.createApp().post('/update/status', async (c) => {
+export const updateRoomStatusRoute = honoFactory.createApp().post('/status', async (c) => {
   const { id, status } = await c.req.json<{
     id: string
     status: string

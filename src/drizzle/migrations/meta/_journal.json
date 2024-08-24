@@ -43,6 +43,13 @@
       "when": 1724427330565,
       "tag": "0005_bent_raider",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1724467234137,
+      "tag": "0006_exotic_switch",
+      "breakpoints": true
     }
   ]
 }

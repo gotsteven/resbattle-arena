@@ -2,7 +2,7 @@ import { debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import { honoFactory } from '../../factory'
 
-export const createRoomRoute = honoFactory.createApp().post('/create', async (c) => {
+export const createRoomRoute = honoFactory.createApp().post('/', async (c) => {
   const { topic, player1_id } = await c.req.json()
   try {
     // 部屋の作成
