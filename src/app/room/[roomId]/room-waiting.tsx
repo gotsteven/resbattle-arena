@@ -6,6 +6,7 @@ import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
 import { IconClockPause, IconCrown, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
 import { type FC, useState } from 'react'
 
 type RoomWaitingProps = {
@@ -18,9 +19,10 @@ export const RoomWaiting: FC<RoomWaitingProps> = ({ room, userPosition, userId }
   const { user: user1 } = useUser(room.player1_id)
   const [isSelecting, setIsSelecting] = useState(false)
   const [selectedPosition, setSelectedPosition] = useState<'agree' | 'disagree' | null>(null)
-
+  const router = useRouter()
   const deleteRoom = async () => {
     await apiClient.api.room.delete.$post({ json: { id: room.id } })
+    router.push('/')
   }
 
   if (userPosition === 1) {
