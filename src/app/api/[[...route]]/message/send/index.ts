@@ -27,18 +27,15 @@ export const sendMessageRoute = honoFactory
       .where(eq(debateMessages.room_id, roomId))
       .orderBy(asc(debateMessages.msg_id))
 
-    if (allMessages.length >= 10) {
-      const [roomInfo] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
-      const organizedMessages = allMessages.map(({ room_id, ...rest }) => ({
-        ...rest,
-        position:
-          roomInfo.player1_id === rest.player_id
-            ? roomInfo.player1_position
-            : roomInfo.player2_position,
-      }))
+    const [roomInfo] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
+    const organizedMessages = allMessages.map(({ room_id, ...rest }) => ({
+      ...rest,
+      position:
+        roomInfo.player1_id === rest.player_id
+          ? roomInfo.player1_position
+          : roomInfo.player2_position,
+    }))
 
-      const response = await judgementAI(organizedMessages, roomInfo.topic)
-      return c.json({ response })
-    }
-    return c.json(newMessage)
+    const response = await judgementAI(organizedMessages, roomInfo.topic)
+    return c.json({ response })
   })
