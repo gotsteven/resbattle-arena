@@ -3,7 +3,6 @@ import { IconButton } from '@/components/ui/IconButton'
 import { apiClient } from '@/lib/apiClient'
 import { IconHomePlus, IconLoader2 } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useCallback, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
@@ -36,9 +35,6 @@ export const CreateRoom = () => {
 
   return (
     <>
-      <Link href="/rule" className="text-blue-500 underline">
-        ルール説明を見る
-      </Link>
       <h2>新規ディベート作成</h2>
       <div className="flex items-center gap-x-2">
         <input
