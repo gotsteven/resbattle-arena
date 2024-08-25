@@ -1,12 +1,13 @@
 'use client'
 import { IconButton } from '@/components/ui/IconButton'
 import { Loading } from '@/components/ui/Loading'
+import TextContent from '@/components/ui/textContent'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/types'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
-import { type FC, useMemo, useState } from 'react'
+import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
 
 type RoomGameProps = {
@@ -19,13 +20,13 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
-
   const myPosition = userPosition === 1 ? room.player1_position : room.player2_position
-
-  const { messages, setMessages, isLoading } = useMessage(room.id)
-
+  const { messages, isError, isLoading } = useMessage(room.id)
   const [isSending, setIsSending] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   const sendMessage = async () => {
+    setMessageInput('')
     setIsSending(true)
     await apiClient.api.message.send
       .$post({
@@ -33,22 +34,26 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       })
       .finally(() => {
         setIsSending(false)
-        setMessageInput('')
-        setMessages((prev) => [
-          ...prev,
-          { player_id: userId, room_id: room.id, message: messageInput },
-        ])
       })
   }
 
   const turnUser = useMemo(() => {
     if (messages?.length === 0) return room.player2_id
-    const lastMessageUser = messages.at(-1)?.player_id
+    const lastMessageUser = messages?.at(-1)?.player_id
     return lastMessageUser === room.player1_id ? room.player2_id : room.player1_id
   }, [messages, room.player1_id, room.player2_id])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [messageInput])
+
+  if (isLoading) return <Loading />
   return (
-    <div className="relative flex grow flex-col gap-y-8 pb-16">
+    <div className="relative flex h-full grow flex-col gap-y-8 pb-16">
       <div className="flex flex-col items-center gap-y-2">
         <h2 className="font-bold text-lg">
           <span>｢{room.topic}について｣</span> -{' '}
@@ -61,18 +66,17 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         </p>
       </div>
       {isLoading || messages !== undefined ? (
-        <div className="flex flex-col gap-y-2">
-          {messages.map?.((message) => (
-            <div key={message.msg_id} className="flex">
-              <p
-                className={twJoin(
-                  'w-fit max-w-[80%] rounded-md p-2',
-                  message.player_id === enemyUserId && 'bg-background-50',
-                  message.player_id === userId && 'text ml-auto bg-accent text-white',
-                )}
-              >
-                {message.message}
-              </p>
+        <div className="flex flex-col gap-y-2 overflow-y-auto">
+          {messages?.map?.((message) => (
+            <div
+              key={message.msg_id}
+              className={twJoin(
+                'w-fit max-w-[80%] rounded-md px-4 py-2',
+                message.player_id === enemyUserId && 'bg-background-50',
+                message.player_id === userId && 'text ml-auto bg-accent text-white',
+              )}
+            >
+              <TextContent textContent={message.message} />
             </div>
           ))}
         </div>
@@ -80,9 +84,11 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         <Loading />
       )}
       <div className="absolute bottom-0 flex w-full gap-x-2">
-        <input
-          type="text"
+        <textarea
+          ref={textareaRef}
           value={messageInput}
+          rows={1}
+          maxLength={400}
           disabled={isSending || turnUser !== userId}
           onChange={(e) => setMessageInput(e.currentTarget.value)}
           placeholder={turnUser === userId ? 'メッセージを送信' : '相手のターンです'}
@@ -90,6 +96,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
             'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
             'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             turnUser !== userId && 'cursor-not-allowed placeholder:text-accent-200',
+            'resize-none overflow-hidden',
           )}
         />
         <IconButton
