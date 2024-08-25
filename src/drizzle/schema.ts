@@ -1,6 +1,7 @@
 import {
   boolean,
   integer,
+  json,
   pgTable,
   primaryKey,
   serial,
@@ -104,4 +105,10 @@ export const debateMessages = pgTable('debate_messages', {
   room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
   player_id: text('player_id').notNull(),
   message: text('message').notNull(),
+})
+
+export const debateResults = pgTable('debate_results', {
+  result_id: serial('result_id').primaryKey(),
+  room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
+  result: json('result').notNull(),
 })

@@ -27,6 +27,15 @@ export const sendMessageRoute = honoFactory
       .where(eq(debateMessages.room_id, roomId))
       .orderBy(asc(debateMessages.msg_id))
 
+    if (allMessages.length >= 10) {
+      await dbClient
+        .update(debateRooms)
+        .set({
+          status: 'ended',
+        })
+        .where(eq(debateRooms.id, roomId))
+    }
+
     const [roomInfo] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
     const organizedMessages = allMessages.map(({ room_id, ...rest }) => ({
       ...rest,
