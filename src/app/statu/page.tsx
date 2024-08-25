@@ -58,7 +58,7 @@ const page = () => {
         {dummydata.map((data, index) => (
           <div
             key={index}
-            className="flex w-full items-center justify-between rounded-md p-4 ring-4 ring-slate-400/50"
+            className="flex w-full items-center justify-between rounded-md p-4 ring-2 ring-slate-400/50"
           >
             <p className="truncate font-bold">{data.topic}</p>
             <div className="flex items-center justify-center gap-x-2 text-foreground-300">
