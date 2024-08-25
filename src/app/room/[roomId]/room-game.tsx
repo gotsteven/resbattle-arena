@@ -79,6 +79,34 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
               <TextContent textContent={message.message} />
             </div>
           ))}
+          {turnUser !== userId && (
+            <div
+              className={twJoin(
+                'flex w-fit max-w-[80%] space-x-1 rounded-md px-4 py-2',
+                'bg-background-50',
+                'text bg-accent text-white',
+              )}
+            >
+              <span
+                className={twJoin('animate-bounce text-3xl text-black delay-100')}
+                style={{ animationDelay: '100ms' }}
+              >
+                .
+              </span>
+              <span
+                className={twJoin('animate-bounce text-3xl text-black delay-300')}
+                style={{ animationDelay: '200ms' }}
+              >
+                .
+              </span>
+              <span
+                className={twJoin('animate-bounce text-3xl text-black delay-500')}
+                style={{ animationDelay: '300ms' }}
+              >
+                .
+              </span>
+            </div>
+          )}
         </div>
       ) : (
         <Loading />
