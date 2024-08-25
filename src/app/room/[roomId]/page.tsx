@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { RoomGame } from './room-game'
 import { RoomReady } from './room-ready'
+import RoomResult from './room-result'
 import { RoomWaiting } from './room-waiting'
 
 const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
@@ -46,8 +47,8 @@ const roomPage = ({ params: { roomId } }: { params: { roomId: string } }) => {
   if (room.status === 'ready') return <RoomReady room={room} userPosition={userStatus} />
   if (room.status === 'playing')
     return <RoomGame room={room} userId={userId} userPosition={userStatus} />
-  if (room?.status === 'end') {
-    return <div>ゲームが終了しました ここに結果を表示予定</div>
+  if (room?.status === 'ended') {
+    return <RoomResult room={room} />
   }
 }
 
