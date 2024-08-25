@@ -3,6 +3,7 @@ import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { messageRoute } from './message'
 import { getResultRoute } from './result'
+import { getAllResultsRoute } from './result/all'
 import { roomRoute } from './room'
 import { UserRouter } from './user'
 
@@ -16,6 +17,7 @@ const route = app
   .route('/message', messageRoute)
   .route('/user', UserRouter)
   .route('/result', getResultRoute)
+  .route('/result/all', getAllResultsRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)
