@@ -1,4 +1,4 @@
-import { debateMessages, debateRooms } from '@/drizzle/schema'
+import { debateMessages, debateResults, debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import { judgementAI } from '@/lib/judgementAI'
 import { zValidator } from '@hono/zod-validator'
@@ -27,15 +27,6 @@ export const sendMessageRoute = honoFactory
       .where(eq(debateMessages.room_id, roomId))
       .orderBy(asc(debateMessages.msg_id))
 
-    if (allMessages.length >= 10) {
-      await dbClient
-        .update(debateRooms)
-        .set({
-          status: 'ended',
-        })
-        .where(eq(debateRooms.id, roomId))
-    }
-
     const [roomInfo] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
     const organizedMessages = allMessages.map(({ room_id, ...rest }) => ({
       ...rest,
@@ -46,5 +37,15 @@ export const sendMessageRoute = honoFactory
     }))
 
     const response = await judgementAI(organizedMessages, roomInfo.topic)
+
+    if (allMessages.length >= 10) {
+      await dbClient
+        .update(debateRooms)
+        .set({
+          status: 'ended',
+        })
+        .where(eq(debateRooms.id, roomId))
+      await dbClient.insert(debateResults).values({ room_id: roomId, result: c.json({ response }) })
+    }
     return c.json({ response })
   })

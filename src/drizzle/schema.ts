@@ -1,7 +1,6 @@
 import {
   boolean,
   integer,
-  json,
   pgTable,
   primaryKey,
   serial,
@@ -110,5 +109,9 @@ export const debateMessages = pgTable('debate_messages', {
 export const debateResults = pgTable('debate_results', {
   result_id: serial('result_id').primaryKey(),
   room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
-  result: json('result').notNull(),
+  winner: integer('winner').notNull(),
+  ad_p1: integer('ad_p1').notNull(),
+  ad_p2: integer('ad_p2').notNull(),
+  reason: text('reason').notNull(),
+  feedback: text('feedback').notNull(),
 })
