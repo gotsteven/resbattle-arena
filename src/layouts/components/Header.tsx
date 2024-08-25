@@ -8,7 +8,7 @@ export const Header = () => (
       <Link href="/" className="transition-colors hover:text-accent-400">
         {PROJECT_NAME}
       </Link>
-      <Link href={'/statu'}>
+      <Link href={'/stats'}>
         <IconUserCircle size={32} />
       </Link>
     </div>

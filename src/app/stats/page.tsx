@@ -1,3 +1,5 @@
+'use client'
+
 import { IconHandOff, IconHandStop, IconSkull, IconTrophy } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
