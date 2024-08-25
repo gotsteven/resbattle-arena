@@ -8,6 +8,27 @@
       "when": 1724469292194,
       "tag": "0000_black_mordo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1724548211319,
+      "tag": "0001_sudden_shiver_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1724551733006,
+      "tag": "0002_swift_cassandra_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1724552171721,
+      "tag": "0003_puzzling_misty_knight",
+      "breakpoints": true
     }
   ]
 }

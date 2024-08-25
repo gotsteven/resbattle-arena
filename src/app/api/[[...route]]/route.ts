@@ -2,6 +2,7 @@ import { handle } from 'hono/vercel'
 import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { messageRoute } from './message'
+import { getResultRoute } from './result'
 import { roomRoute } from './room'
 import { UserRouter } from './user'
 
@@ -14,6 +15,7 @@ const route = app
   .route('/room', roomRoute)
   .route('/message', messageRoute)
   .route('/user', UserRouter)
+  .route('/result', getResultRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)

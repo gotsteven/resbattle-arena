@@ -1,3 +1,4 @@
+import type { AIResponse } from '@/types/types'
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateObject } from 'ai'
 import { z } from 'zod'
@@ -16,7 +17,10 @@ type OrganizedMessages = {
   message: string
 }
 
-export const judgementAI = async (organizedMessages: OrganizedMessages[], topic: string) => {
+export const judgementAI = async (
+  organizedMessages: OrganizedMessages[],
+  topic: string,
+): Promise<AIResponse> => {
   try {
     const { object } = await generateObject({
       model,
@@ -43,6 +47,17 @@ export const judgementAI = async (organizedMessages: OrganizedMessages[], topic:
     })
     return object
   } catch (error) {
-    return error
+    const errorObject = {
+      info: {
+        winner: 0,
+        advantageRate: {
+          player1: 0,
+          player2: 0,
+        },
+        reason: '取得できませんでした',
+        feedback: '取得できませんでした',
+      },
+    }
+    return errorObject
   }
 }

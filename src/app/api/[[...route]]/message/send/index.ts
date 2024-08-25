@@ -1,6 +1,7 @@
-import { debateMessages, debateRooms } from '@/drizzle/schema'
+import { debateMessages, debateResults, debateRooms } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import { judgementAI } from '@/lib/judgementAI'
+import type { AIResponse } from '@/types/types'
 import { zValidator } from '@hono/zod-validator'
 import { asc, eq } from 'drizzle-orm'
 import { z } from 'zod'
@@ -36,6 +37,24 @@ export const sendMessageRoute = honoFactory
           : roomInfo.player2_position,
     }))
 
-    const response = await judgementAI(organizedMessages, roomInfo.topic)
+    const response: AIResponse = await judgementAI(organizedMessages, roomInfo.topic)
+
+    if (allMessages.length >= 10) {
+      await dbClient
+        .update(debateRooms)
+        .set({
+          status: 'ended',
+        })
+        .where(eq(debateRooms.id, roomId))
+      const result = response.info
+      await dbClient.insert(debateResults).values({
+        room_id: roomId,
+        winner: result.winner,
+        ad_p1: result.advantageRate.player1,
+        ad_p2: result.advantageRate.player2,
+        reason: result.reason,
+        feedback: result.feedback,
+      })
+    }
     return c.json({ response })
   })
