@@ -57,7 +57,7 @@ const page = () => {
         </div>
         {dummydata.map((data, index) => (
           <div
-            key={index}
+            key={data.topic}
             className="flex w-full items-center justify-between rounded-md p-4 ring-2 ring-slate-400/50"
           >
             <p className="truncate font-bold">{data.topic}</p>
