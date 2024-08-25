@@ -5,7 +5,7 @@ import TextContent from '@/components/ui/textContent'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
-import type { Room } from '@/types/types'
+import type { AIResponse, Room } from '@/types/types'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
 import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
@@ -24,17 +24,19 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const { messages, isError, isLoading } = useMessage(room.id)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-
+  const [result, setResult] = useState<AIResponse>()
   const sendMessage = async () => {
     setMessageInput('')
     setIsSending(true)
-    await apiClient.api.message.send
+    const res = await apiClient.api.message.send
       .$post({
         json: { roomId: room.id, playerId: userId, message: messageInput },
       })
       .finally(() => {
         setIsSending(false)
       })
+    const aiData = await res.json()
+    setResult(aiData.response)
   }
 
   const turnUser = useMemo(() => {
@@ -61,6 +63,16 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
             {myPosition === 'agree' ? '賛成' : '反対'}
           </span>
         </h2>
+        <p>
+          現在
+          {room.player1_id === userId
+            ? result?.info.advantageRate.player1 && result?.info.advantageRate.player1 >= 50
+              ? '優勢です！'
+              : '劣勢です…'
+            : result?.info.advantageRate.player2 && result?.info.advantageRate.player2 >= 50
+              ? '優勢です！'
+              : '劣勢です…'}
+        </p>
         <p className="flex items-center gap-x-2 text-foreground-400">
           vs <IconUser size={20} /> {enemyUser?.name}
         </p>
