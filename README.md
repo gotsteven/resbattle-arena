@@ -2,10 +2,22 @@
 
 ## Description
 
-<!-- RBAの説明を書く -->
-<!-- 現時点では省略 -->
+"ResBattleArena" is a web application game where you can enjoy real-time 1-on-1 debates online. Players choose a side—either for or against—and take turns sending arguments to support their stance. After the debate ends, an AI determines the winner and provides feedback. Sharpen your logical thinking and enhance your debating skills in this engaging battle of words.
 
-This Project is developed for GeekCamp hackathon.
+## Tech Stack
+
+### Frontend
+- React
+- Next.js
+- Tailwind CSS
+
+### Backend
+- Hono
+- NextAuth
+- Drizzle ORM
+- Vercel Postgres
+- Vercel AI SDK
+
 
 ## Development
 
