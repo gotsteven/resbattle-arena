@@ -1,38 +1,43 @@
+'use client'
+
 import { IconHandOff, IconHandStop, IconSkull, IconTrophy } from '@tabler/icons-react'
+import { useSession } from 'next-auth/react'
+import useSWR from 'swr'
+
+type Result = {
+  result_id: number
+  room_id: string
+  winner: number
+  winner_id: string
+  ad_p1: number
+  ad_p2: number
+  reason: string
+  feedback: string
+  player1_id: string
+  player2_id: string
+  topic: string
+}
+
+const fetcher = (url: string) =>
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => data)
 
 const page = () => {
-  const dummydata = [
-    {
-      topic: '体罰は許されるべきか',
-      position: 'agree',
-      result: 'win',
-    },
-    {
-      topic: '体罰は許されるべきか',
-      position: 'agree',
-      result: 'lose',
-    },
-    {
-      topic: '体罰は許されるべきか',
-      position: 'disdgree',
-      result: 'win',
-    },
-    {
-      topic: '体罰は許されるべきか',
-      position: 'agree',
-      result: 'win',
-    },
-    {
-      topic: '体罰は許されるべきか',
-      position: 'agree',
-      result: 'lose',
-    },
-    {
-      topic: '体罰は許されるべきか',
-      position: 'agree',
-      result: 'win',
-    },
-  ]
+  const { data: session } = useSession()
+  const { data: results, error, isLoading } = useSWR<Result[]>('/api/result/all', fetcher)
+  if (session === null) {
+    return <div>ログインしてください</div>
+  }
+  const userId = session?.user.id
+  if (!results) return <div>loading...</div>
+
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+
+  const filteredData = results.filter(
+    (result: Result) => result.player1_id === userId || result.player2_id === userId,
+  )
   return (
     <div className="flex flex-col gap-y-8 text-center">
       <div className="flex flex-col items-center gap-y-5 rounded-md py-8">
@@ -40,14 +45,20 @@ const page = () => {
           <div className="flex flex-col items-center justify-center">
             <div className="font-bold">通算勝利数</div>
             <div className="flex items-end">
-              <div className="text-6xl">50</div>
+              <div className="text-6xl">
+                {filteredData.filter((result) => result.winner_id === userId).length}
+              </div>
               <div className="text-xl">回</div>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
             <div className="font-bold">勝率</div>
             <div className="flex items-end">
-              <div className="text-6xl">50</div>
+              <div className="text-6xl">
+                {(filteredData.filter((result) => result.winner_id === userId).length /
+                  filteredData.length) *
+                  100}
+              </div>
               <div className="text-xl">%</div>
             </div>
           </div>
@@ -55,19 +66,19 @@ const page = () => {
         <div className="mt-10 flex w-full justify-start px-3">
           <div className="font-bold">対戦履歴</div>
         </div>
-        {dummydata.map((data, index) => (
+        {filteredData.map((result) => (
           <div
-            key={data.topic}
+            key={result.result_id}
             className="flex w-full items-center justify-between rounded-md p-4 ring-2 ring-slate-400/50"
           >
-            <p className="truncate font-bold">{data.topic}</p>
+            <p className="truncate font-bold">{result.topic}</p>
             <div className="flex items-center justify-center gap-x-2 text-foreground-300">
-              {data.position === 'agree' ? (
+              {result.winner_id === userId && result.winner === 1 ? (
                 <IconHandStop size={25} color={'#71aaf5'} />
               ) : (
                 <IconHandOff size={25} color={'#ff6b7c'} />
               )}
-              {data.result === 'win' ? (
+              {result.winner_id === userId ? (
                 <IconTrophy size={30} color={'#e0d312'} />
               ) : (
                 <IconSkull size={30} />
