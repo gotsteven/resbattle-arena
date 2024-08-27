@@ -30,7 +30,7 @@ const page = () => {
     return <div>ログインしてください</div>
   }
   const userId = session?.user.id
-  if (!results) return <div>loading...</div>
+  if (!results) return <div>戦績がありません</div>
 
   if (error) return <div>failed to load</div>
   if (isLoading) return <div>loading...</div>
