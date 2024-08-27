@@ -33,6 +33,20 @@ CREATE TABLE IF NOT EXISTS "debate_messages" (
 	"message" text NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "debate_results" (
+	"result_id" serial PRIMARY KEY NOT NULL,
+	"id" uuid,
+	"winner" integer,
+	"winner_id" text,
+	"player1_id" text,
+	"player2_id" text,
+	"ad_p1" integer NOT NULL,
+	"ad_p2" integer NOT NULL,
+	"reason" text NOT NULL,
+	"feedback" text NOT NULL,
+	"topic" text
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "debate_rooms" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"topic" text NOT NULL,
@@ -79,6 +93,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "debate_messages" ADD CONSTRAINT "debate_messages_id_debate_rooms_id_fk" FOREIGN KEY ("id") REFERENCES "public"."debate_rooms"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "debate_results" ADD CONSTRAINT "debate_results_id_debate_rooms_id_fk" FOREIGN KEY ("id") REFERENCES "public"."debate_rooms"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -1,1 +1,0 @@
-ALTER TABLE "debate_results" ADD COLUMN "player1_id" text;

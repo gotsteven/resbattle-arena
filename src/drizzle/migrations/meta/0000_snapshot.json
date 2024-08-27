@@ -1,5 +1,5 @@
 {
-  "id": "4f7d6053-22b4-4850-8b51-8d5a98be4006",
+  "id": "60d3350b-ea60-4d3c-b88f-c555b9253d7e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -224,6 +224,96 @@
         "debate_messages_id_debate_rooms_id_fk": {
           "name": "debate_messages_id_debate_rooms_id_fk",
           "tableFrom": "debate_messages",
+          "tableTo": "debate_rooms",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.debate_results": {
+      "name": "debate_results",
+      "schema": "",
+      "columns": {
+        "result_id": {
+          "name": "result_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "winner": {
+          "name": "winner",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "winner_id": {
+          "name": "winner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player1_id": {
+          "name": "player1_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "player2_id": {
+          "name": "player2_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ad_p1": {
+          "name": "ad_p1",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ad_p2": {
+          "name": "ad_p2",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "topic": {
+          "name": "topic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "debate_results_id_debate_rooms_id_fk": {
+          "name": "debate_results_id_debate_rooms_id_fk",
+          "tableFrom": "debate_results",
           "tableTo": "debate_rooms",
           "columnsFrom": [
             "id"

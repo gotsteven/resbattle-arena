@@ -1,1 +1,0 @@
-ALTER TABLE "debate_results" ALTER COLUMN "result" SET DATA TYPE jsonb;

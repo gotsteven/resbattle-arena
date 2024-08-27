@@ -1,1 +1,0 @@
-ALTER TABLE "debate_results" ADD COLUMN "winner_id" text NOT NULL;

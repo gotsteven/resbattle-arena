@@ -117,5 +117,5 @@ export const debateResults = pgTable('debate_results', {
   ad_p2: integer('ad_p2').notNull(),
   reason: text('reason').notNull(),
   feedback: text('feedback').notNull(),
-  topic: text('topic').notNull(),
+  topic: text('topic'),
 })
