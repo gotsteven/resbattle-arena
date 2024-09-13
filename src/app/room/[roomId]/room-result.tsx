@@ -25,17 +25,17 @@ const RoomResult: FC<RoomResultProps> = ({ room, userId }) => {
 
   if (isLoading || result === undefined) return <Loading />
 
-  const winner = result.ad_p1 > result.ad_p2 ? room.player1_id : room.player2_id
-
   return (
     <div className="flex flex-col items-center gap-y-8">
       <div className="flex flex-col items-center gap-y-4">
-        {winner === userId ? (
+        {result.winner_id === userId ? (
           <IconTrophy size={48} className="text-orange-400" />
         ) : (
           <IconSkull size={48} className="text-gray-600" />
         )}
-        <p className="font-bold text-lg">{winner === userId ? 'YOU WIN!!!' : 'YOU LOSE...'}</p>
+        <p className="font-bold text-lg">
+          {result.winner_id === userId ? 'YOU WIN!!!' : 'YOU LOSE...'}
+        </p>
       </div>
       <div className="w-full">
         <div className="flex justify-between">
