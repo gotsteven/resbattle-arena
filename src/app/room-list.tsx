@@ -1,3 +1,4 @@
+import ReloadButton from '@/components/ui/ReloadButton'
 import { users } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
 import type { Room } from '@/types/types'
@@ -11,7 +12,10 @@ export const RoomList = ({ rooms }: { rooms: Room[] }) => {
   return (
     <>
       <div className="flex items-center gap-x-4">
-        <h2 className="shrink grow">部屋一覧</h2>
+        <div className="flex w-full items-center justify-between ">
+          <h2 className="shrink grow ">部屋一覧</h2>
+          <ReloadButton />
+        </div>
       </div>
       <div className="flex flex-col gap-y-4">
         {rooms.map(async (room) => {
