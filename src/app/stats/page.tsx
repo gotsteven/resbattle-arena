@@ -73,7 +73,7 @@ const page = () => {
           >
             <p className="truncate font-bold">{result.topic}</p>
             <div className="flex items-center justify-center gap-x-2 text-foreground-300">
-              {result.winner_id === userId && result.winner === 1 ? (
+              {result.winner_id === userId ? (
                 <IconHandStop size={25} color={'#71aaf5'} />
               ) : (
                 <IconHandOff size={25} color={'#ff6b7c'} />
