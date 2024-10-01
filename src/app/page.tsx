@@ -22,7 +22,7 @@ const Home = async () => {
     <div className="flex flex-col gap-y-6 bg-background text-foreground">
       <CreateRoom />
       <LinkButton href="/rule" label="ルール説明を見る" icon={<IconNote />} />
-      <RoomList rooms={allRooms} />
+      <RoomList rooms={allRooms.reverse()} />
     </div>
   )
 }
