@@ -12,10 +12,8 @@ export const RoomList = ({ rooms }: { rooms: Room[] }) => {
   return (
     <>
       <div className="flex items-center gap-x-4">
-        <div className="flex w-full items-center justify-between ">
-          <h2 className="shrink grow ">部屋一覧</h2>
-          <ReloadButton />
-        </div>
+        <h2 className="shrink grow ">部屋一覧</h2>
+        <ReloadButton />
       </div>
       <div className="flex flex-col gap-y-4">
         {rooms.map(async (room) => {
