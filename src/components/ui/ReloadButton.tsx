@@ -2,23 +2,24 @@
 import { reloadRoom } from '@/app/actions/reloadRoom'
 import { IconReload } from '@tabler/icons-react'
 import { useTransition } from 'react'
+import { twJoin } from 'tailwind-merge'
+import { IconButton } from './IconButton'
 
 const ReloadButton = () => {
   const [isPending, startTransition] = useTransition()
 
   return (
-    <button
-      onClick={() => {
+    <IconButton
+      onClick={async () => {
         startTransition(async () => {
           await reloadRoom()
         })
       }}
-      className="flex items-center gap-x-2 text-sm"
-      type="button"
-    >
-      <IconReload size={17} className={isPending ? 'animate-spin' : ''} />
-      再読み込み
-    </button>
+      label="更新"
+      icon={IconReload}
+      disabled={isPending}
+      iconClassName={twJoin(isPending && 'animate-spin')}
+    />
   )
 }
 
