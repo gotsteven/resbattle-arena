@@ -1,0 +1,1 @@
+ALTER TABLE "debate_rooms" ADD COLUMN "started_at" timestamp;

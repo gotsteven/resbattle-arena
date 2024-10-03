@@ -16,8 +16,12 @@ type RoomGameProps = {
   userPosition: 1 | 2
 }
 
+const GAME_TIME_LIMIT = 100 // 100秒のゲーム制限時間（仮）
+const TURN_TIME_LIMIT = 10 // 10秒のターン制限時間（仮）
+
 export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
+  const startedAt = room.started_at
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
   const myPosition = userPosition === 1 ? room.player1_position : room.player2_position
@@ -25,25 +29,94 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [result, setResult] = useState<AIResponse>()
-  const sendMessage = async () => {
-    setMessageInput('')
-    setIsSending(true)
-    const res = await apiClient.api.message.send
-      .$post({
-        json: { roomId: room.id, playerId: userId, message: messageInput },
-      })
-      .finally(() => {
-        setIsSending(false)
-      })
-    const aiData = await res.json()
-    setResult(aiData.response)
-  }
-
+  const [gameTimeLeft, setGameTimeLeft] = useState(GAME_TIME_LIMIT)
+  const [turnTimeLeft, setTurnTimeLeft] = useState(TURN_TIME_LIMIT)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const hasTimedOut = useRef(false)
   const turnUser = useMemo(() => {
     if (messages?.length === 0) return room.player2_id
     const lastMessageUser = messages?.at(-1)?.player_id
     return lastMessageUser === room.player1_id ? room.player2_id : room.player1_id
   }, [messages, room.player1_id, room.player2_id])
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    if (startedAt) {
+      interval = setInterval(() => {
+        setGameTimeLeft((prev) =>
+          prev > 0
+            ? GAME_TIME_LIMIT -
+              Math.floor((new Date().getTime() - new Date(startedAt).getTime()) / 1000)
+            : 0,
+        )
+      }, 1000)
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [startedAt])
+
+  const startTimer = () => {
+    stopTimer()
+    hasTimedOut.current = false
+    setTurnTimeLeft(TURN_TIME_LIMIT) // タイマーをリセット
+    timerRef.current = setInterval(() => {
+      setTurnTimeLeft((prev) => {
+        if (prev <= 0) {
+          stopTimer()
+          if (!hasTimedOut.current) {
+            hasTimedOut.current = true
+            handleTurnTimeOut()
+          }
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (turnUser === userId) {
+      startTimer()
+    } else {
+      stopTimer()
+    }
+    return () => {
+      stopTimer()
+    }
+  }, [turnUser])
+
+  const handleTurnTimeOut = () => {
+    // タイムアウト時の処理
+    sendMessage(messageInput)
+  }
+  const handleSendMessage = () => {
+    sendMessage(messageInput)
+  }
+
+  const sendMessage = async (message: string) => {
+    setMessageInput('')
+    setIsSending(true)
+    try {
+      const res = await apiClient.api.message.send.$post({
+        json: { roomId: room.id, playerId: userId, message },
+      })
+      const aiData = await res.json()
+      setResult(aiData.response)
+    } catch (error) {
+      console.error('メッセージの送信中にエラーが発生しました:', error)
+    } finally {
+      setIsSending(false)
+    }
+  }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -76,6 +149,8 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         <p className="flex items-center gap-x-2 text-foreground-400">
           vs <IconUser size={20} /> {enemyUser?.name}
         </p>
+        <p className="text-red-500">ゲーム残り時間：{gameTimeLeft}</p>
+        {turnUser === userId && <p className="text-red-500">ターン残り時間：{turnTimeLeft}</p>}
       </div>
       {isLoading || messages !== undefined ? (
         <div className="flex flex-col gap-y-2 overflow-y-auto">
@@ -123,29 +198,41 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       ) : (
         <Loading />
       )}
-      <div className="absolute bottom-0 flex w-full gap-x-2">
-        <textarea
-          ref={textareaRef}
-          value={messageInput}
-          rows={1}
-          maxLength={400}
-          disabled={isSending || turnUser !== userId}
-          onChange={(e) => setMessageInput(e.currentTarget.value)}
-          placeholder={turnUser === userId ? 'メッセージを送信' : '相手のターンです'}
-          className={twJoin(
-            'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
-            'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            turnUser !== userId && 'cursor-not-allowed placeholder:text-accent-200',
-            'resize-none overflow-hidden',
-          )}
-        />
-        <IconButton
-          icon={turnUser !== userId ? IconBan : isSending ? IconLoader2 : IconSend}
-          onClick={sendMessage}
-          disabled={isSending || turnUser !== userId}
-          iconClassName={twJoin(isSending && 'animate-spin')}
-        />
-      </div>
+      {gameTimeLeft <= 0 ? (
+        <div>終了</div>
+      ) : (
+        <div className="absolute bottom-0 flex w-full gap-x-2">
+          <textarea
+            ref={textareaRef}
+            value={messageInput}
+            rows={1}
+            maxLength={400}
+            disabled={isSending || turnUser !== userId}
+            onChange={(e) => setMessageInput(e.currentTarget.value)}
+            placeholder={
+              turnUser !== userId || turnTimeLeft <= 0 ? '相手のターンです' : 'メッセージを送信'
+            }
+            className={twJoin(
+              'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
+              'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+              turnUser !== userId && 'cursor-not-allowed placeholder:text-accent-200',
+              'resize-none overflow-hidden',
+            )}
+          />
+          <IconButton
+            icon={
+              turnUser !== userId || turnTimeLeft <= 0
+                ? IconBan
+                : isSending
+                  ? IconLoader2
+                  : IconSend
+            }
+            onClick={handleSendMessage}
+            disabled={isSending || turnUser !== userId || turnTimeLeft <= 0}
+            iconClassName={twJoin(isSending && 'animate-spin')}
+          />
+        </div>
+      )}
     </div>
   )
 }

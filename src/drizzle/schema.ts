@@ -97,6 +97,7 @@ export const debateRooms = pgTable('debate_rooms', {
   player1_position: text('player1_position'), //　賛成反対
   player2_position: text('player2_position'),
   status: text('status').notNull().default('waiting'), // 部屋のステータス
+  started_at: timestamp('started_at', { mode: 'date' }), // 開始時間
 })
 
 export const debateMessages = pgTable('debate_messages', {

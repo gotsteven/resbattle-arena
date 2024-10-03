@@ -23,7 +23,7 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
 
   const startGame = async () => {
     setIsLoading(true)
-    await apiClient.api.room.update.status.$post({ json: { status: 'playing', id: room.id } })
+    await apiClient.api.game.start.$post({ json: { roomId: room.id } })
   }
 
   return (

@@ -1,4 +1,4 @@
-import type { debateResults } from '@/drizzle/schema'
+import type { debateMessages, debateResults } from '@/drizzle/schema'
 import type { InferInsertModel } from 'drizzle-orm'
 
 export interface Room {
@@ -9,6 +9,7 @@ export interface Room {
   id: string
   player1_position: string | null
   player2_position: string | null
+  started_at: Date | null | string
 }
 export interface Message {
   msg_id: number
@@ -29,3 +30,4 @@ export interface AIResponse {
 }
 
 export type Result = InferInsertModel<typeof debateResults>
+export type DebateMessage = InferInsertModel<typeof debateMessages>
