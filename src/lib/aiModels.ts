@@ -21,3 +21,6 @@ const googleAiProvider = createGoogleGenerativeAI({
 })
 
 export const googleAiModel = googleAiProvider('gemini-1.5-pro')
+
+export const aiModels = [openaiModel, anthropicModel, googleAiModel]
+export type AiModel = (typeof aiModels)[number]
