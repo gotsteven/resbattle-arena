@@ -1,6 +1,7 @@
 import { Loading } from '@/components/ui/Loading'
 import { apiClient } from '@/lib/apiClient'
-import type { Result, Room } from '@/types/types'
+import type { Result } from '@/types/result'
+import type { Room } from '@/types/room'
 import { IconSkull, IconTrophy } from '@tabler/icons-react'
 import { type FC, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'

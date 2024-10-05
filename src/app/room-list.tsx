@@ -1,7 +1,7 @@
 import ReloadButton from '@/components/ui/ReloadButton'
 import { users } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
-import type { Room } from '@/types/types'
+import type { Room } from '@/types/room'
 import { IconUser } from '@tabler/icons-react'
 import { eq } from 'drizzle-orm'
 import Link from 'next/link'

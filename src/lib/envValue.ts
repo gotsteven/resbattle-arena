@@ -15,3 +15,7 @@ export const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
 export const POSTGRES_DATABASE = process.env.POSTGRES_DATABASE
 export const AUTH_GOOGLE_ID = process.env.AUTH_GOOGLE_ID
 export const AUTH_GOOGLE_SECRET = process.env.AUTH_GOOGLE_SECRET
+
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+export const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY
+export const GEMINI_API_KEY = process.env.GEMINI_API_KEY

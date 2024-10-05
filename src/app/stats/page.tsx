@@ -1,22 +1,9 @@
 'use client'
 
+import type { Result } from '@/types/result'
 import { IconHandOff, IconHandStop, IconSkull, IconTrophy } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
-
-type Result = {
-  result_id: number
-  room_id: string
-  winner: number
-  winner_id: string
-  ad_p1: number
-  ad_p2: number
-  reason: string
-  feedback: string
-  player1_id: string
-  player2_id: string
-  topic: string
-}
 
 const fetcher = (url: string) =>
   fetch(url)

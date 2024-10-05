@@ -5,7 +5,8 @@ import TextContent from '@/components/ui/textContent'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
-import type { AIResponse, Room } from '@/types/types'
+import type { JudgeResult } from '@/types/judge'
+import type { Room } from '@/types/room'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
 import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
@@ -24,7 +25,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const { messages, isError, isLoading } = useMessage(room.id)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [result, setResult] = useState<AIResponse>()
+  const [result, setResult] = useState<JudgeResult>()
   const sendMessage = async () => {
     setMessageInput('')
     setIsSending(true)
@@ -36,7 +37,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         setIsSending(false)
       })
     const aiData = await res.json()
-    setResult(aiData.response)
+    setResult(aiData.judgeResult)
   }
 
   const turnUser = useMemo(() => {
