@@ -39,7 +39,7 @@ export const updateRoomRoute = honoFactory
     const { id, status } = c.req.valid('json')
     const [roomData] = await dbClient
       .update(debateRooms)
-      .set({ status: status })
+      .set({ status: status, started_at: new Date() })
       .where(eq(debateRooms.id, id))
       .returning()
     return c.json(roomData)

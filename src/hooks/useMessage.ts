@@ -23,7 +23,7 @@ export const useMessage = (roomId: string) => {
       query: { roomId },
     }),
     {
-      refreshInterval: 500,
+      refreshInterval: 100,
       revalidateOnFocus: true,
     },
   )

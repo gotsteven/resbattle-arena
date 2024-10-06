@@ -97,6 +97,7 @@ export const debateRooms = pgTable('debate_rooms', {
   player1_position: text('player1_position'), //　賛成反対
   player2_position: text('player2_position'),
   status: text('status').notNull().default('waiting'), // 部屋のステータス
+  started_at: timestamp('started_at'), // ディベート開始時間
 })
 
 export const debateMessages = pgTable('debate_messages', {
@@ -104,6 +105,7 @@ export const debateMessages = pgTable('debate_messages', {
   room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
   player_id: text('player_id').notNull(),
   message: text('message').notNull(),
+  created_at: timestamp('created_at').defaultNow().notNull(),
 })
 
 export const debateResults = pgTable('debate_results', {

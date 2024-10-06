@@ -8,7 +8,7 @@ import { apiClient } from '@/lib/apiClient'
 import type { JudgeResult } from '@/types/judge'
 import type { Room } from '@/types/room'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
-import { type FC, useEffect, useMemo, useRef, useState } from 'react'
+import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
 
 type RoomGameProps = {
@@ -17,34 +17,117 @@ type RoomGameProps = {
   userPosition: 1 | 2
 }
 
+const TURN_TIME_LIMIT = 10 // ターンの制限時間（秒）
+
 export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
+  const [turnTimeLeft, setTurnTimeLeft] = useState(TURN_TIME_LIMIT)
+  const [isSending, setIsSending] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const messageInputRef = useRef<string>('')
+
+  const hasTimedOut = useRef(false)
+  const hasSentMessage = useRef(false)
+  const [result, setResult] = useState<JudgeResult>()
+
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
   const myPosition = userPosition === 1 ? room.player1_position : room.player2_position
   const { messages, isError, isLoading } = useMessage(room.id)
-  const [isSending, setIsSending] = useState(false)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const [result, setResult] = useState<JudgeResult>()
-  const sendMessage = async () => {
-    setMessageInput('')
-    setIsSending(true)
-    const res = await apiClient.api.message.send
-      .$post({
-        json: { roomId: room.id, playerId: userId, message: messageInput },
-      })
-      .finally(() => {
-        setIsSending(false)
-      })
-    const aiData = await res.json()
-    setResult(aiData.judgeResult)
-  }
 
+  // ターンのユーザーを計算
   const turnUser = useMemo(() => {
     if (messages?.length === 0) return room.player2_id
     const lastMessageUser = messages?.at(-1)?.player_id
     return lastMessageUser === room.player1_id ? room.player2_id : room.player1_id
   }, [messages, room.player1_id, room.player2_id])
+
+  // 前のメッセージの作成日時またはルームの開始日時を取得
+  const previousMessageTime = useMemo(() => {
+    const created_at = messages?.at(-1)?.created_at
+    if (created_at && messages.length > 0) {
+      return new Date(created_at).getTime()
+    }
+    if (room.started_at) {
+      return new Date(room.started_at).getTime()
+    }
+    return Date.now()
+  }, [messages, room.started_at])
+
+  useEffect(() => {
+    messageInputRef.current = messageInput
+  }, [messageInput])
+
+  // タイマーを開始・停止する関数を定義
+  const startTimer = useCallback(() => {
+    stopTimer()
+    hasTimedOut.current = false
+    timerRef.current = setInterval(() => {
+      const elapsedSeconds = Math.floor((Date.now() - previousMessageTime) / 1000)
+      const remainingTime = TURN_TIME_LIMIT - elapsedSeconds
+      setTurnTimeLeft(remainingTime >= 0 ? remainingTime : 0)
+
+      if (remainingTime <= 0 && !hasTimedOut.current) {
+        hasTimedOut.current = true
+        stopTimer()
+        handleTurnTimeOut()
+      }
+    }, 1000)
+  }, [previousMessageTime])
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+  }, [])
+
+  // タイムアウト時の処理
+  const handleTurnTimeOut = () => {
+    sendMessage(messageInputRef.current)
+  }
+
+  // メッセージを送信する関数
+  const sendMessage = async (message: string) => {
+    if (isSending || hasSentMessage.current) return
+
+    hasSentMessage.current = true
+    setMessageInput('')
+    setIsSending(true)
+
+    await apiClient.api.message.send
+      .$post({
+        json: { roomId: room.id, playerId: userId, message },
+      })
+      .then((res) => res.json())
+      .then(({ judgeResult }) => {
+        setResult(judgeResult)
+        setMessageInput('')
+      })
+      .catch((error) => {
+        console.error('メッセージの送信中にエラーが発生しました:', error)
+        throw error
+      })
+      .finally(() => setIsSending(false))
+  }
+
+  // 送信ボタンのハンドラー
+  const handleSendMessage = () => {
+    sendMessage(messageInput)
+  }
+
+  // ターンユーザーが変わったときにタイマーを再設定
+  useEffect(() => {
+    if (turnUser === userId) {
+      hasSentMessage.current = false
+      startTimer()
+    } else {
+      stopTimer()
+    }
+
+    return stopTimer
+  }, [turnUser, userId, startTimer, stopTimer])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -77,6 +160,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         <p className="flex items-center gap-x-2 text-foreground-400">
           vs <IconUser size={20} /> {enemyUser?.name}
         </p>
+        {turnUser === userId && <p>ターン残り時間：{turnTimeLeft}秒</p>}
       </div>
       {isLoading || messages !== undefined ? (
         <div className="flex flex-col gap-y-2 overflow-y-auto">
@@ -142,7 +226,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         />
         <IconButton
           icon={turnUser !== userId ? IconBan : isSending ? IconLoader2 : IconSend}
-          onClick={sendMessage}
+          onClick={handleSendMessage}
           disabled={isSending || turnUser !== userId}
           iconClassName={twJoin(isSending && 'animate-spin')}
         />

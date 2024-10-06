@@ -3,6 +3,7 @@ export type Message = {
   room_id: string | null
   player_id: string
   message: string
+  created_at: Date | string
 }
 
 export type MessageWithPosition = Omit<Message, 'room_id'> & {
