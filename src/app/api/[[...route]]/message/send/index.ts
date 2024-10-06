@@ -29,11 +29,12 @@ export const sendMessageRoute = honoFactory
           : currentRoom.player2_position,
     }))
 
-    const judgeResult = await judgeDebate(organizedMessages, currentRoom.topic)
+    const judgeResults = await judgeDebate(organizedMessages, currentRoom.topic)
 
     if (allMessages.length >= 10) {
       await roomRepo.updateStatus(roomId, 'ended')
-      await saveResult(currentRoom, judgeResult)
+      await saveResult(currentRoom, judgeResults)
     }
-    return c.json({ judgeResult })
+
+    return c.json({ judgeResults })
   })

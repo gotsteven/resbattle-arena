@@ -1,6 +1,5 @@
 import { aiClient } from '@/lib/aiClient'
 import { aiModels } from '@/lib/aiModels'
-import type { JudgeResult } from '@/types/judge'
 import type { MessageWithPosition } from '@/types/message'
 import { z } from 'zod'
 
@@ -51,39 +50,17 @@ const failedJudgeResult = {
   },
 }
 
-export const judgeDebate = async (
-  messages: MessageWithPosition[],
-  topic: string,
-): Promise<JudgeResult> => {
-  const judgeResults = await Promise.all(
+export const judgeDebate = async (messages: MessageWithPosition[], topic: string) => {
+  const judgeResultEntires = await Promise.all(
     aiModels.map(async (model) => {
-      return await aiClient
+      const judgeResult = await aiClient
         .generateObject(model, judgeResultSchema, judgePrompt(topic, messages))
         .catch(() => failedJudgeResult)
+      return [model.provider, judgeResult] as const
     }),
   )
 
-  const overAllRate = judgeResults
-    .map(({ info }) => info.advantageRate)
-    .reduce(
-      (acc, { player1, player2 }) => ({
-        player1: acc.player1 + player1 / aiModels.length,
-        player2: acc.player2 + player2 / aiModels.length,
-      }),
-      { player1: 0, player2: 0 },
-    )
-  const winner = overAllRate.player1 > overAllRate.player2 ? 1 : 2
+  const judgeResults = Object.fromEntries(judgeResultEntires)
 
-  return {
-    info: {
-      winner,
-      advantageRate: overAllRate,
-      reason: Object.fromEntries(
-        judgeResults.map(({ info }, index) => [aiModels[index].provider, info.reason]),
-      ),
-      feedback: Object.fromEntries(
-        judgeResults.map(({ info }, index) => [aiModels[index].provider, info.feedback]),
-      ),
-    },
-  }
+  return judgeResults
 }
