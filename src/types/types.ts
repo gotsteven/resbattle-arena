@@ -9,12 +9,14 @@ export interface Room {
   id: string
   player1_position: string | null
   player2_position: string | null
+  started_at: Date | string | null
 }
 export interface Message {
   msg_id: number
   room_id: string | null
   player_id: string
   message: string
+  created_at: Date | string
 }
 export interface AIResponse {
   info: {
