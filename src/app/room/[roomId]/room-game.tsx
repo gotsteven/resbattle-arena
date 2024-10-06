@@ -25,6 +25,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const hasTimedOut = useRef(false)
+  const hasSentMessage = useRef(false)
   const [result, setResult] = useState<AIResponse>()
 
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
@@ -76,13 +77,15 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   }, [])
 
   // タイムアウト時の処理
-  const handleTurnTimeOut = useCallback(() => {
-    sendMessage('') // 空文字列を送信
-  }, [])
+  const handleTurnTimeOut = () => {
+    sendMessage(messageInput)
+  }
 
   // メッセージを送信する関数
   const sendMessage = async (message: string) => {
-    if (isSending) return
+    if (isSending || hasSentMessage.current) return
+    hasSentMessage.current = true
+    setMessageInput('')
     setIsSending(true)
     try {
       const res = await apiClient.api.message.send.$post({
@@ -90,7 +93,6 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
       })
       const aiData = await res.json()
       setResult(aiData.response)
-      setMessageInput('')
     } catch (error) {
       console.error('メッセージの送信中にエラーが発生しました:', error)
     } finally {
@@ -103,9 +105,10 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     sendMessage(messageInput)
   }
 
-  // ターンユーザーまたは前のメッセージの時間が変わったときにタイマーを再設定
+  // ターンユーザーが変わったときにタイマーを再設定
   useEffect(() => {
     if (turnUser === userId) {
+      hasSentMessage.current = false
       startTimer()
     } else {
       stopTimer()
