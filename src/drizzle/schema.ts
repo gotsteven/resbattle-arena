@@ -1,6 +1,7 @@
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   serial,
@@ -108,16 +109,26 @@ export const debateMessages = pgTable('debate_messages', {
   created_at: timestamp('created_at').defaultNow().notNull(),
 })
 
-export const debateResults = pgTable('debate_results', {
-  result_id: serial('result_id').primaryKey(),
-  room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
-  winner: integer('winner'),
-  winner_id: text('winner_id'),
-  player1_id: text('player1_id'),
-  player2_id: text('player2_id'),
-  ad_p1: integer('ad_p1').notNull(),
-  ad_p2: integer('ad_p2').notNull(),
-  reason: text('reason').notNull(),
-  feedback: text('feedback').notNull(),
-  topic: text('topic'),
-})
+export const judgedByEnum = pgEnum('judged_by', ['gpt', 'claude', 'gemini'])
+
+export const debateResults = pgTable(
+  'debate_results',
+  {
+    room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
+    winner: integer('winner'),
+    winner_id: text('winner_id'),
+    player1_id: text('player1_id'),
+    player2_id: text('player2_id'),
+    ad_p1: integer('ad_p1').notNull(),
+    ad_p2: integer('ad_p2').notNull(),
+    reason: text('reason').notNull(),
+    feedback: text('feedback').notNull(),
+    topic: text('topic'),
+    judged_by: judgedByEnum('judged_by').default('gpt').notNull(),
+  },
+  (debateResults) => ({
+    compoundKey: primaryKey({
+      columns: [debateResults.room_id, debateResults.judged_by],
+    }),
+  }),
+)
