@@ -24,6 +24,8 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const messageInputRef = useRef<string>('')
+
   const hasTimedOut = useRef(false)
   const hasSentMessage = useRef(false)
   const [result, setResult] = useState<AIResponse>()
@@ -52,6 +54,10 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     return Date.now()
   }, [messages, room.started_at])
 
+  useEffect(() => {
+    messageInputRef.current = messageInput
+  }, [messageInput])
+
   // タイマーを開始・停止する関数を定義
   const startTimer = useCallback(() => {
     stopTimer()
@@ -78,7 +84,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
 
   // タイムアウト時の処理
   const handleTurnTimeOut = () => {
-    sendMessage(messageInput)
+    sendMessage(messageInputRef.current)
   }
 
   // メッセージを送信する関数
