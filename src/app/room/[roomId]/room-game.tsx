@@ -23,7 +23,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [turnTimeLeft, setTurnTimeLeft] = useState(TURN_TIME_LIMIT)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const messageInputRef = useRef<string>('')
 
   const hasTimedOut = useRef(false)
