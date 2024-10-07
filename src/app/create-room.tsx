@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { type ChangeEvent, useCallback, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
+import { DEBATE_TOPICS } from '../constants/topics'
 
 export const CreateRoom = () => {
   const [topic, setTopic] = useState('')
@@ -38,16 +39,23 @@ export const CreateRoom = () => {
       <h2>新規ディベート作成</h2>
       <div className="flex items-center gap-x-2">
         <input
-          id="topic"
-          type="text"
           value={topic}
-          onChange={inputTopicHandler}
-          placeholder="トピックを入力"
+          type="text"
+          id="topic"
+          name="topic"
+          list="topic-list"
           className={twJoin(
             'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
             'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
           )}
+          placeholder="トピックを選択または入力してください"
+          onChange={inputTopicHandler}
         />
+        <datalist id="topic-list">
+          {DEBATE_TOPICS.map((topic) => (
+            <option key={topic} value={topic} />
+          ))}
+        </datalist>
         <IconButton
           onClick={createRoomHandler}
           label="作成"
