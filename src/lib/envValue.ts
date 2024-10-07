@@ -19,3 +19,4 @@ export const AUTH_GOOGLE_SECRET = process.env.AUTH_GOOGLE_SECRET
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+export const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY
