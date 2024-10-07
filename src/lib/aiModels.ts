@@ -32,7 +32,7 @@ export const mistralModel = mistralProvider('mistral-large-latest')
 export const aiModels = [openaiModel, anthropicModel, googleAiModel, mistralModel] as const
 export type AiModel = (typeof aiModels)[number]
 
-const aiModelNames = ['gpt', 'claude', 'gemini', 'mistral'] as const
+export const aiModelNames = ['gpt', 'claude', 'gemini', 'mistral'] as const
 type AiModelNames = (typeof aiModelNames)[number]
 
 export const getAiModelName = (model: string): AiModelNames => {

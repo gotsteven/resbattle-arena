@@ -8,6 +8,13 @@
       "when": 1728281977521,
       "tag": "0000_supreme_dazzler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728287260537,
+      "tag": "0001_fuzzy_spencer_smythe",
+      "breakpoints": true
     }
   ]
 }

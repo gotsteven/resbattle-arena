@@ -1,3 +1,4 @@
+import { aiModelNames } from '@/lib/aiModels'
 import {
   boolean,
   integer,
@@ -109,7 +110,7 @@ export const debateMessages = pgTable('debate_messages', {
   created_at: timestamp('created_at').defaultNow().notNull(),
 })
 
-export const judgedByEnum = pgEnum('judged_by', ['gpt', 'claude', 'gemini'])
+export const judgedByEnum = pgEnum('judged_by', aiModelNames)
 
 export const debateResults = pgTable(
   'debate_results',
