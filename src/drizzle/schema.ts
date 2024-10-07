@@ -114,7 +114,7 @@ export const judgedByEnum = pgEnum('judged_by', ['gpt', 'claude', 'gemini'])
 export const debateResults = pgTable(
   'debate_results',
   {
-    room_id: uuid('id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
+    room_id: uuid('room_id').references(() => debateRooms.id, { onDelete: 'cascade' }), // 部屋のUUID
     winner: integer('winner'),
     winner_id: text('winner_id'),
     player1_id: text('player1_id'),

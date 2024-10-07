@@ -1,3 +1,9 @@
+DO $$ BEGIN
+ CREATE TYPE "public"."judged_by" AS ENUM('gpt', 'claude', 'gemini');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account" (
 	"userId" text NOT NULL,
 	"type" text NOT NULL,
@@ -35,8 +41,7 @@ CREATE TABLE IF NOT EXISTS "debate_messages" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "debate_results" (
-	"result_id" serial PRIMARY KEY NOT NULL,
-	"id" uuid,
+	"room_id" uuid,
 	"winner" integer,
 	"winner_id" text,
 	"player1_id" text,
@@ -45,7 +50,9 @@ CREATE TABLE IF NOT EXISTS "debate_results" (
 	"ad_p2" integer NOT NULL,
 	"reason" text NOT NULL,
 	"feedback" text NOT NULL,
-	"topic" text
+	"topic" text,
+	"judged_by" "judged_by" DEFAULT 'gpt' NOT NULL,
+	CONSTRAINT "debate_results_room_id_judged_by_pk" PRIMARY KEY("room_id","judged_by")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "debate_rooms" (
@@ -100,7 +107,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "debate_results" ADD CONSTRAINT "debate_results_id_debate_rooms_id_fk" FOREIGN KEY ("id") REFERENCES "public"."debate_rooms"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "debate_results" ADD CONSTRAINT "debate_results_room_id_debate_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."debate_rooms"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

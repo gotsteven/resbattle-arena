@@ -1,5 +1,5 @@
 {
-  "id": "40ea28ef-c351-45c2-b34b-cd5a299d7dd5",
+  "id": "9d7800cd-36aa-415a-9b67-6eac7972acf7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -249,14 +249,8 @@
       "name": "debate_results",
       "schema": "",
       "columns": {
-        "result_id": {
-          "name": "result_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
+        "room_id": {
+          "name": "room_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
@@ -314,16 +308,24 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "judged_by": {
+          "name": "judged_by",
+          "type": "judged_by",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'gpt'"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "debate_results_id_debate_rooms_id_fk": {
-          "name": "debate_results_id_debate_rooms_id_fk",
+        "debate_results_room_id_debate_rooms_id_fk": {
+          "name": "debate_results_room_id_debate_rooms_id_fk",
           "tableFrom": "debate_results",
           "tableTo": "debate_rooms",
           "columnsFrom": [
-            "id"
+            "room_id"
           ],
           "columnsTo": [
             "id"
@@ -332,7 +334,15 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "debate_results_room_id_judged_by_pk": {
+          "name": "debate_results_room_id_judged_by_pk",
+          "columns": [
+            "room_id",
+            "judged_by"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     },
     "public.debate_rooms": {
@@ -521,7 +531,17 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.judged_by": {
+      "name": "judged_by",
+      "schema": "public",
+      "values": [
+        "gpt",
+        "claude",
+        "gemini"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "_meta": {
