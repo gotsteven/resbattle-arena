@@ -39,6 +39,7 @@ export const CreateRoom = () => {
       <h2>新規ディベート作成</h2>
       <div className="flex items-center gap-x-2">
         <input
+          value={topic}
           type="text"
           id="topic"
           name="topic"
