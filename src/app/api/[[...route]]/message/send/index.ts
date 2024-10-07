@@ -1,3 +1,4 @@
+import { DEBATE_MESSAGE_LIMIT } from '@/constants/config'
 import { messageRepo } from '@/repositories/messageRepo'
 import { roomRepo } from '@/repositories/roomRepo'
 import { judgeDebate } from '@/services/judge'
@@ -31,7 +32,7 @@ export const sendMessageRoute = honoFactory
 
     const judgeResults = await judgeDebate(organizedMessages, currentRoom.topic)
 
-    if (allMessages.length >= 10) {
+    if (allMessages.length >= DEBATE_MESSAGE_LIMIT) {
       await roomRepo.updateStatus(roomId, 'ended')
       await saveResult(currentRoom, judgeResults)
     }

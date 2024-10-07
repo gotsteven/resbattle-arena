@@ -2,6 +2,7 @@
 import { IconButton } from '@/components/ui/IconButton'
 import { Loading } from '@/components/ui/Loading'
 import TextContent from '@/components/ui/textContent'
+import { DEBATE_TURN_TIME_LIMIT } from '@/constants/config'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
@@ -18,11 +19,9 @@ type RoomGameProps = {
   userPosition: 1 | 2
 }
 
-const TURN_TIME_LIMIT = 10 // ターンの制限時間（秒）
-
 export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
-  const [turnTimeLeft, setTurnTimeLeft] = useState(TURN_TIME_LIMIT)
+  const [turnTimeLeft, setTurnTimeLeft] = useState(DEBATE_TURN_TIME_LIMIT)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -66,7 +65,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     hasTimedOut.current = false
     timerRef.current = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - previousMessageTime) / 1000)
-      const remainingTime = TURN_TIME_LIMIT - elapsedSeconds
+      const remainingTime = DEBATE_TURN_TIME_LIMIT - elapsedSeconds
       setTurnTimeLeft(remainingTime >= 0 ? remainingTime : 0)
 
       if (remainingTime <= 0 && !hasTimedOut.current) {
