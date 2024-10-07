@@ -1,5 +1,7 @@
+import { auth } from '@/auth'
 import { debateResults } from '@/drizzle/schema'
 import { dbClient } from '@/lib/dbClient'
+import { eq, or } from 'drizzle-orm'
 import { z } from 'zod'
 import { honoFactory } from '../../factory'
 
@@ -19,6 +21,20 @@ const querySchema = z.object({
 //   })
 
 export const getAllResultsRoute = honoFactory.createApp().get('/', async (c) => {
-  const results = await dbClient.select().from(debateResults)
+  const session = await auth()
+  if (session === null) {
+    return c.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const results = await dbClient
+    .select()
+    .from(debateResults)
+    .where(
+      or(
+        eq(debateResults.player1_id, session.user.id),
+        eq(debateResults.player2_id, session.user.id),
+      ),
+    )
+
   return c.json(results)
 })
