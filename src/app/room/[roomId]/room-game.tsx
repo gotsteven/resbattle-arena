@@ -5,7 +5,8 @@ import TextContent from '@/components/ui/textContent'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
-import type { JudgeResult } from '@/types/judge'
+import { aggregateJudgeResults } from '@/services/result'
+import type { AggregatedJudgeResult } from '@/types/judge'
 import type { Room } from '@/types/room'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -29,7 +30,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
 
   const hasTimedOut = useRef(false)
   const hasSentMessage = useRef(false)
-  const [result, setResult] = useState<JudgeResult>()
+  const [result, setResult] = useState<AggregatedJudgeResult>()
 
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
@@ -101,8 +102,8 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
         json: { roomId: room.id, playerId: userId, message },
       })
       .then((res) => res.json())
-      .then(({ judgeResult }) => {
-        setResult(judgeResult)
+      .then(({ judgeResults }) => {
+        setResult(aggregateJudgeResults(judgeResults))
         setMessageInput('')
       })
       .catch((error) => {

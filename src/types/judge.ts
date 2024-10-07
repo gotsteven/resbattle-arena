@@ -9,3 +9,12 @@ export type JudgeResult = {
     feedback: string
   }
 }
+
+type MultiAiComments = {
+  reason: string[]
+  feedback: string[]
+}
+
+export type AggregatedJudgeResult = {
+  info: Omit<JudgeResult['info'], keyof MultiAiComments> & MultiAiComments
+}

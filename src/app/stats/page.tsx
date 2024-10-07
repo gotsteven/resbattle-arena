@@ -1,8 +1,10 @@
 'use client'
 
+import { aggregateResults } from '@/services/result'
 import type { Result } from '@/types/result'
 import { IconHandOff, IconHandStop, IconSkull, IconTrophy } from '@tabler/icons-react'
 import { useSession } from 'next-auth/react'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -10,6 +12,17 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json())
 const page = () => {
   const { data: session } = useSession()
   const { data: results, error, isLoading } = useSWR<Result[]>('/api/result/all', fetcher)
+
+  const aggregateJudgeResults = useMemo<Result[][]>(() => {
+    if (results === undefined) return []
+    const groupedResults = Object.groupBy(results, ({ room_id }) => room_id ?? 'unknown room')
+    const resultEntries = Object.entries(groupedResults)
+    const sortedResults = resultEntries
+      .toSorted(([roomId, _], [roomId2, __]) => roomId.localeCompare(roomId2))
+      .map(([_, results]) => results)
+      .filter((results) => results !== undefined)
+    return sortedResults
+  }, [results])
 
   if (session === null) {
     return <div>ログインしてください</div>
@@ -27,7 +40,10 @@ const page = () => {
             <div className="font-bold">通算勝利数</div>
             <div className="flex items-end">
               <div className="text-6xl">
-                {results.filter((result) => result.winner_id === session.user.id).length}
+                {
+                  aggregateJudgeResults.filter((result) => result[0].winner_id === session.user.id)
+                    .length
+                }
               </div>
               <div className="text-xl">回</div>
             </div>
@@ -47,9 +63,9 @@ const page = () => {
         <div className="mt-10 flex w-full justify-start px-3">
           <div className="font-bold">対戦履歴</div>
         </div>
-        {results.map((result) => (
+        {aggregateJudgeResults.map(aggregateResults).map((result) => (
           <div
-            key={`${result.room_id}-${result.judged_by}`}
+            key={result.room_id}
             className="flex w-full items-center justify-between rounded-md p-4 ring-2 ring-slate-400/50"
           >
             <p className="truncate font-bold">{result.topic}</p>
