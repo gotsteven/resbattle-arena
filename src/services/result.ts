@@ -1,5 +1,5 @@
 import type { debateResults } from '@/drizzle/schema'
-import { type AiModel, isAiModel } from '@/lib/aiModels'
+import { type AiModel, getAiModelName } from '@/lib/aiModels'
 import { resultRepo } from '@/repositories/resultRepo'
 import type { JudgeResult } from '@/types/judge'
 import type { Room } from '@/types/room'
@@ -21,7 +21,7 @@ export const saveResult = async (
     ad_p2: judgeResult.advantageRate.player2,
     player1_id: currentRoom.player1_id,
     player2_id: currentRoom.player2_id,
-    judged_by: isAiModel(provider) ? provider : 'gpt',
+    judged_by: getAiModelName(provider),
   })) satisfies InferInsertModel<typeof debateResults>[]
 
   const createdResult = await Promise.all(resultDates.map((result) => resultRepo.create(result)))

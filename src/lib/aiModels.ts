@@ -25,11 +25,12 @@ export const googleAiModel = googleAiProvider('gemini-1.5-pro')
 export const aiModels = [openaiModel, anthropicModel, googleAiModel] as const
 export type AiModel = (typeof aiModels)[number]
 
-type AiModelNames = 'gpt' | 'claude' | 'gemini'
+const aiModelNames = ['gpt', 'claude', 'gemini'] as const
+type AiModelNames = (typeof aiModelNames)[number]
 
-export const isAiModel = (provider: string): provider is AiModelNames => {
-  if (aiModels.some((model) => model.provider === provider)) {
-    return true as const
-  }
-  throw new Error(`Invalid provider: ${provider}`)
+export const getAiModelName = (model: string): AiModelNames => {
+  if (model === openaiModel.provider) return 'gpt'
+  if (model === anthropicModel.provider) return 'claude'
+  if (model === googleAiModel.provider) return 'gemini'
+  return 'gpt' // default value
 }
