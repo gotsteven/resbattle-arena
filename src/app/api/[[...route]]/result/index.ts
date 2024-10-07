@@ -13,9 +13,10 @@ export const getResultRoute = honoFactory
   .createApp()
   .get('/', zValidator('query', querySchema), async (c) => {
     const { roomId } = c.req.valid('query')
-    const [result] = await dbClient
+    const results = await dbClient
       .select()
       .from(debateResults)
       .where(eq(debateResults.room_id, roomId))
-    return c.json(result)
+
+    return c.json(results)
   })
