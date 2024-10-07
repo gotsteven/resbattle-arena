@@ -8,7 +8,7 @@ import { apiClient } from '@/lib/apiClient'
 import type { AIResponse, Room } from '@/types/types'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { twJoin } from 'tailwind-merge'
+import { twJoin, twMerge } from 'tailwind-merge'
 
 type RoomGameProps = {
   room: Room
@@ -142,19 +142,45 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
             {myPosition === 'agree' ? '賛成' : '反対'}
           </span>
         </h2>
-        <p>
-          現在
-          {room.player1_id === userId
-            ? result?.info.advantageRate.player1 && result?.info.advantageRate.player1 >= 50
-              ? '優勢です！'
-              : '劣勢です…'
-            : result?.info.advantageRate.player2 && result?.info.advantageRate.player2 >= 50
-              ? '優勢です！'
-              : '劣勢です…'}
-        </p>
         <p className="flex items-center gap-x-2 text-foreground-400">
           vs <IconUser size={20} /> {enemyUser?.name}
         </p>
+        {result && (
+          <>
+            <div className="w-full">
+              <div className="flex justify-between">
+                <span>{result.info.advantageRate.player1}%</span>
+                <span> {result.info.advantageRate.player2}%</span>
+              </div>
+              <div className="flex w-full overflow-hidden rounded-full">
+                <span
+                  style={{ width: `${result.info.advantageRate.player1}%` }}
+                  className={twMerge(
+                    'block h-3 bg-background-50',
+                    room.player1_id === userId && 'bg-accent/60',
+                  )}
+                />
+                <span
+                  style={{ width: `${result.info.advantageRate.player2}%` }}
+                  className={twMerge(
+                    'block h-3 bg-background-50',
+                    room.player2_id === userId && 'bg-accent/60',
+                  )}
+                />
+              </div>
+            </div>
+            <p>
+              現在
+              {room.player1_id === userId
+                ? result.info.advantageRate.player1 && result.info.advantageRate.player1 >= 50
+                  ? '優勢です！'
+                  : '劣勢です…'
+                : result.info.advantageRate.player2 && result.info.advantageRate.player2 >= 50
+                  ? '優勢です！'
+                  : '劣勢です…'}
+            </p>
+          </>
+        )}
         {turnUser === userId && <p>ターン残り時間：{turnTimeLeft}秒</p>}
       </div>
       {isLoading || messages !== undefined ? (
