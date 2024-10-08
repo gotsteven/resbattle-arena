@@ -1,23 +1,17 @@
-import { users } from '@/drizzle/schema'
-import { dbClient } from '@/lib/dbClient'
+import { userRepo } from '@/repositories/userRepo'
 import { zValidator } from '@hono/zod-validator'
-import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { honoFactory } from '../factory'
 
-const QuerySchema = z.object({
+const getQuerySchema = z.object({
   userId: z.string(),
 })
 
-export const UserRouter = honoFactory
+export const userRouter = honoFactory
   .createApp()
-  .get('/', zValidator('query', QuerySchema), async (c) => {
+  .get('/', zValidator('query', getQuerySchema), async (c) => {
     const { userId } = c.req.valid('query')
 
-    try {
-      const [user] = await dbClient.select().from(users).where(eq(users.id, userId))
-      return c.json(user, 200)
-    } catch (e) {
-      return c.json({ message: e }, 500)
-    }
+    const user = await userRepo.findOne(userId)
+    return c.json(user)
   })
