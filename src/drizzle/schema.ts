@@ -99,6 +99,7 @@ export const debateRooms = pgTable('debate_rooms', {
   player1_position: text('player1_position'), //　賛成反対
   player2_position: text('player2_position'),
   status: text('status').notNull().default('waiting'), // 部屋のステータス
+  created_at: timestamp('created_at').defaultNow().notNull(), // 部屋の作成時間
   started_at: timestamp('started_at'), // ディベート開始時間
 })
 
