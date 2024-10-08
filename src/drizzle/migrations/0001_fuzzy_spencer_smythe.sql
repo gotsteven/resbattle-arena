@@ -1,0 +1,1 @@
+ALTER TYPE "judged_by" ADD VALUE 'mistral';

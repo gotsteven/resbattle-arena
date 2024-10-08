@@ -2,10 +2,13 @@
 import { IconButton } from '@/components/ui/IconButton'
 import { Loading } from '@/components/ui/Loading'
 import TextContent from '@/components/ui/textContent'
+import { DEBATE_TURN_TIME_LIMIT } from '@/constants/config'
 import { useMessage } from '@/hooks/useMessage'
 import { useUser } from '@/hooks/useUser'
 import { apiClient } from '@/lib/apiClient'
-import type { AIResponse, Room } from '@/types/types'
+import { aggregateJudgeResults } from '@/services/result'
+import type { AggregatedJudgeResult } from '@/types/judge'
+import type { Room } from '@/types/room'
 import { IconBan, IconLoader2, IconSend, IconUser } from '@tabler/icons-react'
 import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { twJoin, twMerge } from 'tailwind-merge'
@@ -16,11 +19,9 @@ type RoomGameProps = {
   userPosition: 1 | 2
 }
 
-const TURN_TIME_LIMIT = 10 // ターンの制限時間（秒）
-
 export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   const [messageInput, setMessageInput] = useState('')
-  const [turnTimeLeft, setTurnTimeLeft] = useState(TURN_TIME_LIMIT)
+  const [turnTimeLeft, setTurnTimeLeft] = useState(DEBATE_TURN_TIME_LIMIT)
   const [isSending, setIsSending] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -28,7 +29,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
 
   const hasTimedOut = useRef(false)
   const hasSentMessage = useRef(false)
-  const [result, setResult] = useState<AIResponse>()
+  const [result, setResult] = useState<AggregatedJudgeResult>()
 
   const enemyUserId = userPosition === 1 ? room.player2_id : room.player1_id
   const { user: enemyUser } = useUser(enemyUserId ?? '')
@@ -64,7 +65,7 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     hasTimedOut.current = false
     timerRef.current = setInterval(() => {
       const elapsedSeconds = Math.floor((Date.now() - previousMessageTime) / 1000)
-      const remainingTime = TURN_TIME_LIMIT - elapsedSeconds
+      const remainingTime = DEBATE_TURN_TIME_LIMIT - elapsedSeconds
       setTurnTimeLeft(remainingTime >= 0 ? remainingTime : 0)
 
       if (remainingTime <= 0 && !hasTimedOut.current) {
@@ -90,20 +91,25 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
   // メッセージを送信する関数
   const sendMessage = async (message: string) => {
     if (isSending || hasSentMessage.current) return
+
     hasSentMessage.current = true
     setMessageInput('')
     setIsSending(true)
-    try {
-      const res = await apiClient.api.message.send.$post({
+
+    await apiClient.api.message.send
+      .$post({
         json: { roomId: room.id, playerId: userId, message },
       })
-      const aiData = await res.json()
-      setResult(aiData.response)
-    } catch (error) {
-      console.error('メッセージの送信中にエラーが発生しました:', error)
-    } finally {
-      setIsSending(false)
-    }
+      .then((res) => res.json())
+      .then(({ judgeResults }) => {
+        setResult(aggregateJudgeResults(judgeResults))
+        setMessageInput('')
+      })
+      .catch((error) => {
+        console.error('メッセージの送信中にエラーが発生しました:', error)
+        throw error
+      })
+      .finally(() => setIsSending(false))
   }
 
   // 送信ボタンのハンドラー
@@ -119,9 +125,8 @@ export const RoomGame: FC<RoomGameProps> = ({ room, userId, userPosition }) => {
     } else {
       stopTimer()
     }
-    return () => {
-      stopTimer()
-    }
+
+    return stopTimer
   }, [turnUser, userId, startTimer, stopTimer])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

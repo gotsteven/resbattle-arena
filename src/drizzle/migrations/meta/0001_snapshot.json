@@ -1,6 +1,6 @@
 {
-  "id": "9d7800cd-36aa-415a-9b67-6eac7972acf7",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "b1cefdbb-7b8b-4c37-ace3-1b6fd4bff8b6",
+  "prevId": "9d7800cd-36aa-415a-9b67-6eac7972acf7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -538,7 +538,8 @@
       "values": [
         "gpt",
         "claude",
-        "gemini"
+        "gemini",
+        "mistral"
       ]
     }
   },
