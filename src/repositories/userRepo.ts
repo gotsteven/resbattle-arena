@@ -7,4 +7,11 @@ export const userRepo = {
     const [user] = await dbClient.select().from(users).where(eq(users.id, userId))
     return user
   },
+  getUserName: async (userId: string) => {
+    const [{ name }] = await dbClient
+      .select({ name: users.name })
+      .from(users)
+      .where(eq(users.id, userId))
+    return name ?? 'player'
+  },
 }

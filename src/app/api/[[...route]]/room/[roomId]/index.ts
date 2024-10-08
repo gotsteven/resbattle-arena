@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { honoFactory } from '../../factory'
 import { roomStatusRoute } from './status'
 
-export const roomIdPathParamSchema = z.object({
+const roomIdPathParamSchema = z.object({
   roomId: z.string(),
 })
 

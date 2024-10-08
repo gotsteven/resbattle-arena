@@ -1,11 +1,14 @@
 import { roomRepo } from '@/repositories/roomRepo'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
-import { roomIdPathParamSchema } from '..'
 import { honoFactory } from '../../../factory'
 
 const patchReqBodySchema = z.object({
   status: z.string(),
+})
+
+const roomIdPathParamSchema = z.object({
+  roomId: z.string(),
 })
 
 export const roomStatusRoute = honoFactory

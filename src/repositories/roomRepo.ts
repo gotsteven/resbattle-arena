@@ -7,6 +7,10 @@ export const roomRepo = {
     const [room] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
     return room
   },
+  findWaiting: async () => {
+    const rooms = await dbClient.select().from(debateRooms).where(eq(debateRooms.status, 'waiting'))
+    return rooms
+  },
   getStatus: async (roomId: string) => {
     const [{ status }] = await dbClient
       .select({ status: debateRooms.status })

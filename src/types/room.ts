@@ -6,5 +6,5 @@ export type Room = {
   id: string
   player1_position: string | null
   player2_position: string | null
-  started_at: Date | string | null
+  started_at: Date | null
 }

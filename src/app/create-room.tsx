@@ -18,20 +18,26 @@ export const CreateRoom = () => {
     setTopic(e.currentTarget.value)
   }, [])
 
+  const createRoomHandler = useCallback(async () => {
+    if (session === null) return
+    setIsCreating(true)
+
+    await apiClient.api.room
+      .$post({
+        json: { player1_id: session.user.id, topic: topic },
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        router.push(`/room/${data.id}`)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => setIsCreating(false))
+  }, [session, topic, router])
+
   if (session === null) {
     router.push('/auth/login')
-    return null
-  }
-
-  const createRoomHandler = async () => {
-    setIsCreating(true)
-    const res = await apiClient.api.room.create.$post({
-      json: { player1_id: session.user.id, topic: topic },
-    })
-    if (res.ok) {
-      const data = await res.json()
-      router.push(`/room/${data.room_id}`)
-    }
   }
 
   return (

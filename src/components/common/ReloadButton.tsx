@@ -3,7 +3,7 @@ import { reloadRoom } from '@/app/actions/reloadRoom'
 import { IconReload } from '@tabler/icons-react'
 import { useTransition } from 'react'
 import { twJoin } from 'tailwind-merge'
-import { IconButton } from './IconButton'
+import { IconButton } from '../ui/IconButton'
 
 const ReloadButton = () => {
   const [isPending, startTransition] = useTransition()

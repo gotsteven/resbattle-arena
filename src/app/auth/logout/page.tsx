@@ -11,7 +11,7 @@ const LogOut = async () => {
     'use server'
     await signOut()
       .then(() => redirect('/auth/login'))
-      .catch(() => alert('ログアウトに失敗しました'))
+      .catch(() => console.error('ログアウトに失敗しました'))
   }
 
   return (
