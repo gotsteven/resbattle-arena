@@ -6,7 +6,7 @@ const honoFactory = createFactory({
     app.use(
       cors({
         origin: (origin) => origin,
-        allowMethods: ['GET', 'POST'],
+        allowMethods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
       }),
     )
   },

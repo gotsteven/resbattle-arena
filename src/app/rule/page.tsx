@@ -3,68 +3,53 @@ import {
   IconDeviceGamepad2,
   IconMessage2,
   IconMessageDots,
-  IconPray,
   IconSword,
   IconTrophy,
 } from '@tabler/icons-react'
-const RulePage = () => {
-  return (
-    <div className="bg-white p-6 font-sans text-gray-800">
-      <div className="container mx-auto">
-        <h1 className="mb-8 text-center font-bold text-3xl">
-          <span className="inline-flex items-center">
-            <IconMessage2 className="mr-2 text-blue-500" />
-            レスバトルアリーナ ルール説明
-          </span>
-        </h1>
 
-        <div className="mb-8">
-          <h2 className="mb-4 flex items-center font-semibold text-xl">
-            <IconPray className="mr-2 text-green-500" />
-            1. ゲーム開始
-          </h2>
-          <p className="pl-8">プレイヤー1がディベートのトピックを決定し部屋を作成します。</p>
-          <p className="pl-8">プレイヤー2が部屋を選び、賛成か反対の立場を選択して入室します。</p>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="mb-4 flex items-center font-semibold text-xl">
-            <IconMessageDots className="mr-2 text-yellow-500" />
-            2. ディベート
-          </h2>
-          <p className="pl-8">プレイヤー1がゲームを開始し、ディベートがスタートします。</p>
-          <p className="pl-8">
-            プレイヤー同士が交互に主張を送信します。各プレイヤーは5回まで主張を送信できます。
-          </p>
-          <p className="pl-8">「相手のターンです」と表示されている間は送信できません。</p>
-        </div>
-
-        <div className="mb-8">
-          <h2 className="mb-4 flex items-center font-semibold text-xl">
-            <IconTrophy className="mr-2 text-red-500" />
-            3. 結果
-          </h2>
-          <p className="pl-8">すべての主張が終わるとゲームが終了します。</p>
-          <p className="pl-8">AIが勝敗を判定し、その根拠とフィードバックを表示します。</p>
-        </div>
-
-        <div className="mt-12 text-center">
-          <p className="font-semibold text-lg">
-            <span className="inline-flex items-center">
-              <IconSword className="mr-2 text-indigo-500" />
-              勝利を目指してディベート力を鍛えましょう！
-            </span>
-          </p>
-        </div>
-      </div>
-      <LinkButton
-        href="/"
-        className="mx-auto"
-        icon={<IconDeviceGamepad2 />}
-        label="ゲームを始める"
-      />
+const Rule = () => (
+  <div className="flex flex-col items-center gap-y-12">
+    <h1 className="flex items-center justify-center gap-x-4 font-bold text-2xl">
+      <IconMessage2 className="text-blue-500" size={32} />
+      レスバトルアリーナ ルール説明
+    </h1>
+    <section className="flex w-full flex-col gap-y-2">
+      <h2 className="flex items-center gap-x-4 font-bold text-xl">
+        <IconDeviceGamepad2 className="text-green-500" />
+        ゲーム開始
+      </h2>
+      <p className="whitespace-pre-line">
+        プレイヤー1がディベートのトピックを決定し部屋を作成します。 <br />
+        プレイヤー2が部屋を選び、賛成か反対の立場を選択して入室します。
+      </p>
+    </section>
+    <section className="flex w-full flex-col gap-y-2">
+      <h2 className="flex items-center gap-x-4 font-bold text-xl">
+        <IconMessageDots className="text-yellow-500" />
+        ディベート
+      </h2>
+      <p className="whitespace-pre-line">
+        プレイヤー1がゲームを開始し、ディベートがスタートします。 <br />
+        プレイヤー同士が交互に主張を送信します。各プレイヤーは5回まで主張を送信できます。 <br />
+        「相手のターンです」と表示されている間は送信できません。
+      </p>
+    </section>
+    <section className="flex w-full flex-col gap-y-2">
+      <h2 className="flex items-center gap-x-4 font-bold text-xl">
+        <IconTrophy className="text-red-500" />
+        結果
+      </h2>
+      <p className="whitespace-pre-line">
+        すべての主張が終わるとゲームが終了します。 <br />
+        AIが勝敗を判定し、その根拠とフィードバックを表示します。
+      </p>
+    </section>
+    <div className="flex items-center justify-center gap-x-2 font-bold text-xl">
+      <IconSword className="text-indigo-500" size={32} />
+      勝利を目指してディベート力を鍛えましょう！
     </div>
-  )
-}
+    <LinkButton href="/" icon={<IconDeviceGamepad2 />} label="ゲームを始める" />
+  </div>
+)
 
-export default RulePage
+export default Rule

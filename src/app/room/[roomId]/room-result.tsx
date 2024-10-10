@@ -1,4 +1,4 @@
-import { Loading } from '@/components/ui/Loading'
+import { Loading } from '@/components/common/Loading'
 import { aiModelNames } from '@/lib/aiModels'
 import { apiClient } from '@/lib/apiClient'
 import { aggregateResults } from '@/services/result'
@@ -19,8 +19,8 @@ const RoomResult: FC<RoomResultProps> = ({ room, userId }) => {
 
   useEffect(() => {
     const fetchResult = async () => {
-      const res = await apiClient.api.result
-        .$get({ query: { roomId: room.id } })
+      const res = await apiClient.api.result[':roomId']
+        .$get({ param: { roomId: room.id } })
         .then((res) => res.json())
       return res
     }

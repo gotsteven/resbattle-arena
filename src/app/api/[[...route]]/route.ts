@@ -2,10 +2,9 @@ import { handle } from 'hono/vercel'
 import { honoFactory } from './factory'
 import { healthRoute } from './health'
 import { messageRoute } from './message'
-import { getResultRoute } from './result'
-import { getAllResultsRoute } from './result/all'
+import { resultRoute } from './result'
 import { roomRoute } from './room'
-import { UserRouter } from './user'
+import { userRouter } from './user'
 
 export const runtime = 'edge'
 
@@ -15,11 +14,13 @@ const route = app
   .route('/health', healthRoute)
   .route('/room', roomRoute)
   .route('/message', messageRoute)
-  .route('/user', UserRouter)
-  .route('/result', getResultRoute)
-  .route('/result/all', getAllResultsRoute)
+  .route('/user', userRouter)
+  .route('/result', resultRoute)
 
 export const GET = handle(app)
 export const POST = handle(app)
+export const PUT = handle(app)
+export const PATCH = handle(app)
+export const DELETE = handle(app)
 
 export type AppType = typeof route

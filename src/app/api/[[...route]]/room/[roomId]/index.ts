@@ -1,18 +1,41 @@
-import { debateRooms } from '@/drizzle/schema'
-import { dbClient } from '@/lib/dbClient'
+import { roomRepo } from '@/repositories/roomRepo'
 import { zValidator } from '@hono/zod-validator'
-import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { honoFactory } from '../../factory'
+import { roomStatusRoute } from './status'
 
-const pathParamSchema = z.object({
+const roomIdPathParamSchema = z.object({
   roomId: z.string(),
 })
 
-export const getRoomRoute = honoFactory
+const postReqBodySchema = z.object({
+  status: z.string(),
+  p1_pos: z.string(),
+  p2_pos: z.string(),
+  p2_id: z.string(),
+})
+
+export const specifyRoomRoute = honoFactory
   .createApp()
-  .get('/:roomId', zValidator('param', pathParamSchema), async (c) => {
+  .route('/status', roomStatusRoute)
+  .get('/', zValidator('param', roomIdPathParamSchema), async (c) => {
     const { roomId } = c.req.valid('param')
-    const [roomData] = await dbClient.select().from(debateRooms).where(eq(debateRooms.id, roomId))
-    return c.json(roomData)
+    const room = await roomRepo.findUnique(roomId)
+    return c.json(room)
+  })
+  .put(
+    '/',
+    zValidator('param', roomIdPathParamSchema),
+    zValidator('json', postReqBodySchema),
+    async (c) => {
+      const { roomId } = c.req.valid('param')
+      const { status, p2_id, p1_pos, p2_pos } = c.req.valid('json')
+      const updatedRoom = await roomRepo.update(roomId, status, p2_id, p1_pos, p2_pos)
+      return c.json(updatedRoom)
+    },
+  )
+  .delete('/', zValidator('param', roomIdPathParamSchema), async (c) => {
+    const { roomId } = c.req.valid('param')
+    const deletedRoom = await roomRepo.delete(roomId)
+    return c.json(deletedRoom)
   })

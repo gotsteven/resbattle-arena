@@ -15,6 +15,13 @@
       "when": 1728287260537,
       "tag": "0001_fuzzy_spencer_smythe",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728380684775,
+      "tag": "0002_jazzy_ben_urich",
+      "breakpoints": true
     }
   ]
 }

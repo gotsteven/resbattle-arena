@@ -1,12 +1,13 @@
 'use client'
 
+import { Loading } from '@/components/common/Loading'
 import { IconButton } from '@/components/ui/IconButton'
-import { Loading } from '@/components/ui/Loading'
-import { useUser } from '@/hooks/useUser'
+import { positionInfoMap } from '@/constants/game'
+import { useUser } from '@/hooks/fetcher/useUser'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/room'
 import { IconClockPause, IconDeviceGamepad2, IconLoader2 } from '@tabler/icons-react'
-import { type FC, useState } from 'react'
+import { type FC, useCallback, useState } from 'react'
 import { twJoin } from 'tailwind-merge'
 
 type RoomReadyProps = {
@@ -19,12 +20,17 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
   const { user: user2 } = useUser(room.player2_id ?? '')
   const [isLoading, setIsLoading] = useState(false)
 
-  if (user1 === undefined || user2 === undefined) return <Loading />
-
-  const startGame = async () => {
+  const handleStartGame = useCallback(async () => {
     setIsLoading(true)
-    await apiClient.api.room.update.status.$post({ json: { status: 'playing', id: room.id } })
-  }
+    await apiClient.api.room[':roomId'].status
+      .$patch({
+        json: { status: 'playing' },
+        param: { roomId: room.id },
+      })
+      .finally(() => setIsLoading(false))
+  }, [room.id])
+
+  if (user1 === undefined || user2 === undefined) return <Loading />
 
   return (
     <div className="flex flex-col gap-y-8">
@@ -36,7 +42,8 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
         <div className="flex justify-center gap-x-4 ">
           <span
             className={twJoin(
-              room.player1_position === 'agree' ? 'text-blue-500/80' : 'text-red-500/80',
+              room.player1_position === 'agree' && `text-${positionInfoMap.agree.color}`,
+              room.player1_position === 'disagree' && `text-${positionInfoMap.disagree.color}`,
               'font-bold text-xl',
             )}
           >
@@ -45,7 +52,8 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
           <span>VS</span>
           <span
             className={twJoin(
-              room.player2_position === 'agree' ? 'text-blue-500/80' : 'text-red-500/80',
+              room.player2_position === 'agree' && `text-${positionInfoMap.agree.color}`,
+              room.player2_position === 'disagree' && `text-${positionInfoMap.disagree.color}`,
               'font-bold text-xl',
             )}
           >
@@ -62,7 +70,7 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
                 icon={isLoading ? IconLoader2 : IconDeviceGamepad2}
                 label="ゲームを開始する"
                 iconClassName={twJoin(isLoading && 'animate-spin text-accent')}
-                onClick={startGame}
+                onClick={handleStartGame}
               />
             </div>
           </div>
