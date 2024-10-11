@@ -36,7 +36,7 @@ export const RoomSelectPosition: FC<RoomSelectPositionProps> = ({ room, userId }
 
   return (
     <div className="flex flex-col gap-y-8 text-center">
-      <div className="flex flex-col items-center gap-y-8 rounded-md border border-background-100 py-8">
+      <div className="line-clamp-3 flex flex-col items-center gap-y-8 rounded-md border border-background-100 px-4 py-8">
         <hgroup>
           <p className="truncate font-bold">トピック</p>
           <h2 className="text-4xl text-accent">{room.topic}</h2>
@@ -58,7 +58,8 @@ export const RoomSelectPosition: FC<RoomSelectPositionProps> = ({ room, userId }
                 'w-full shrink rounded-md border p-8 font-bold text-2xl transition-colors',
                 `border-${color}`,
                 `text-${color}`,
-                `hover:bg-${color}/10`,
+                position === 'agree' && 'hover:bg-blue-500/10',
+                position === 'disagree' && 'hover:bg-red-500/10',
               )}
             >
               {isSelecting && selectedPosition === position ? <Loading /> : label}

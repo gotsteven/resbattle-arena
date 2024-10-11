@@ -34,7 +34,7 @@ export const RoomReady: FC<RoomReadyProps> = ({ room, userPosition }) => {
 
   return (
     <div className="flex flex-col gap-y-8">
-      <div className="flex flex-col items-center gap-y-8 rounded-md border border-background-100 py-8">
+      <div className="flex flex-col items-center gap-y-8 rounded-md border border-background-100 px-4 py-8">
         <hgroup className="text-center">
           <p className="truncate font-bold">トピック</p>
           <h2 className="text-4xl text-accent">{room.topic}</h2>
