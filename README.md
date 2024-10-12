@@ -7,17 +7,24 @@
 ## Tech Stack
 
 ### Frontend
+
 - React
-- Next.js
+- Next.js (AppRouter)
 - Tailwind CSS
 
 ### Backend
+
+- Next.js (RouteHandler)
 - Hono
 - NextAuth
-- Drizzle ORM
-- Vercel Postgres
+- Drizzle
 - Vercel AI SDK
 
+### Deployment
+
+- Vercel
+- Vercel Postgres
+- Cloudflare AI Gateway
 
 ## Development
 
@@ -42,7 +49,7 @@ pnpm install
 cp .env.local.example .env.local
 ```
 
-Copy the required information from `vercel/postgres`, `google cloud`. \
+Copy the required information from `vercel/postgres`, `google cloud`, and some AI services. \
 And, execute the following command to generate `AUTH_SECRET`
 
 ```bash
