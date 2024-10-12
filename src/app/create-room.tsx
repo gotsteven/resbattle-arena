@@ -53,6 +53,7 @@ export const CreateRoom = () => {
           className={twJoin(
             'shrink grow rounded-lg border border-background-100 bg-background-50 p-2 text-sm outline-0',
             'focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+            '[&::-webkit-calendar-picker-indicator]:opacity-0',
           )}
           placeholder="トピックを選択または入力してください"
           onChange={inputTopicHandler}

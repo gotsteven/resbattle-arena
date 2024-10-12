@@ -20,3 +20,6 @@ export const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 export const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 export const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY
+
+export const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID
+export const CF_AIGATEWAY_NAME = process.env.CF_AIGATEWAY_NAME

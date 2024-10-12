@@ -1,11 +1,13 @@
 import { Loading } from '@/components/common/Loading'
+import { aiModelInfoMap } from '@/constants/game'
 import { aiModelNames } from '@/lib/aiModels'
 import { apiClient } from '@/lib/apiClient'
 import { aggregateResults } from '@/services/result'
 import type { Result } from '@/types/result'
 import type { Room } from '@/types/room'
 import { IconSkull, IconTrophy } from '@tabler/icons-react'
-import { type FC, Fragment, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { type FC, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 type RoomResultProps = {
@@ -68,23 +70,49 @@ const RoomResult: FC<RoomResultProps> = ({ room, userId }) => {
           />
         </div>
       </div>
-      <div>
+      <div className="flex flex-col gap-y-4">
         <h3 className="text-center font-bold text-lg">判定の根拠</h3>
-        {totalResult.reason.map((reason, i) => (
-          <Fragment key={aiModelNames[i]}>
-            <h4>{aiModelNames[i]}</h4>
-            <p>{reason}</p>
-          </Fragment>
-        ))}
+        <div className="grid gap-4 md:grid-cols-2">
+          {totalResult.reason.map((reason, i) => (
+            <div
+              key={aiModelNames[i]}
+              className="flex flex-col gap-y-2 rounded-lg border border-background-200 p-4"
+            >
+              <hgroup className="flex items-center gap-x-2">
+                <Image
+                  src={aiModelInfoMap[aiModelNames[i]].icon}
+                  alt={aiModelNames[i]}
+                  width={24}
+                  height={24}
+                />
+                <h4>{aiModelInfoMap[aiModelNames[i]].label}</h4>
+              </hgroup>
+              <p>{reason}</p>
+            </div>
+          ))}
+        </div>
       </div>
-      <div>
+      <div className="flex flex-col gap-y-4">
         <h3 className="text-center font-bold text-lg">フィードバック</h3>
-        {totalResult.feedback.map((feedback, i) => (
-          <Fragment key={aiModelNames[i]}>
-            <h4>{aiModelNames[i]}</h4>
-            <p>{feedback}</p>
-          </Fragment>
-        ))}
+        <div className="grid gap-4">
+          {totalResult.feedback.map((feedback, i) => (
+            <div
+              key={aiModelNames[i]}
+              className="flex flex-col gap-y-2 rounded-lg border border-background-200 p-4"
+            >
+              <hgroup className="flex items-center gap-x-2">
+                <Image
+                  src={aiModelInfoMap[aiModelNames[i]].icon}
+                  alt={aiModelNames[i]}
+                  width={24}
+                  height={24}
+                />
+                <h4>{aiModelInfoMap[aiModelNames[i]].label}</h4>
+              </hgroup>
+              <p>{feedback}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
