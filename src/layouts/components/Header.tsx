@@ -1,3 +1,4 @@
+import { LinkButton } from '@/components/ui/LinkButton'
 import { PROJECT_NAME } from '@/constants/project'
 import { IconUserCircle } from '@tabler/icons-react'
 import Link from 'next/link'
@@ -8,9 +9,7 @@ export const Header = () => (
       <Link href="/" className="transition-colors hover:text-accent-400">
         {PROJECT_NAME}
       </Link>
-      <Link href={'/stats'}>
-        <IconUserCircle size={32} />
-      </Link>
+      <LinkButton href="/stats" icon={<IconUserCircle size={24} />} className="bg-transparent" />
     </div>
   </header>
 )

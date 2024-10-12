@@ -2,10 +2,20 @@ import { createAnthropic } from '@ai-sdk/anthropic'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createMistral } from '@ai-sdk/mistral'
 import { createOpenAI } from '@ai-sdk/openai'
-import { CLAUDE_API_KEY, GEMINI_API_KEY, MISTRAL_API_KEY, OPENAI_API_KEY } from './envValue'
+import {
+  CF_ACCOUNT_ID,
+  CF_AIGATEWAY_NAME,
+  CLAUDE_API_KEY,
+  GEMINI_API_KEY,
+  MISTRAL_API_KEY,
+  OPENAI_API_KEY,
+} from './envValue'
+
+const AIGATEWAY_BASEURL = `https://gateway.ai.cloudflare.com/v1/${CF_ACCOUNT_ID}/${CF_AIGATEWAY_NAME}`
 
 const openaiProvider = createOpenAI({
   apiKey: OPENAI_API_KEY,
+  baseURL: `${AIGATEWAY_BASEURL}/openai`,
   compatibility: 'strict',
 })
 
@@ -13,18 +23,22 @@ export const openaiModel = openaiProvider('gpt-4o')
 
 const anthropicProvider = createAnthropic({
   apiKey: CLAUDE_API_KEY,
+  baseURL: `${AIGATEWAY_BASEURL}/anthropic`,
 })
 
 export const anthropicModel = anthropicProvider('claude-3-5-sonnet-20240620')
 
 const googleAiProvider = createGoogleGenerativeAI({
   apiKey: GEMINI_API_KEY,
+  // baseURL: `${AIGATEWAY_BASEURL}/google-ai-studio/v1`
+  // #INFO: ai-gateway for google-ai-studio is beta, so occurring error
 })
 
 export const googleAiModel = googleAiProvider('gemini-1.5-pro')
 
 const mistralProvider = createMistral({
   apiKey: MISTRAL_API_KEY,
+  baseURL: `${AIGATEWAY_BASEURL}/mistral`,
 })
 
 export const mistralModel = mistralProvider('mistral-large-latest')

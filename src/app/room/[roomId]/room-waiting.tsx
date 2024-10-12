@@ -4,7 +4,7 @@ import { IconButton } from '@/components/ui/IconButton'
 import { apiClient } from '@/lib/apiClient'
 import type { Room } from '@/types/room'
 import { IconClockPause, IconTrash } from '@tabler/icons-react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { type FC, useCallback } from 'react'
 
 type RoomWaitingProps = {
